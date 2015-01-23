@@ -11,3 +11,6 @@ Pygame helps :
  
 Link Portable Python 3.2.5.1 + Pygame :
 - http://adrien.bct.free.fr/python.html
+
+Tutorials platformer :
+- http://programarcadegames.com/index.php?chapter=example_code&lang=fr
