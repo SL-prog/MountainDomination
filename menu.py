@@ -9,4 +9,5 @@
 import pygame
 from pygame.locals import *
 
-pygame.init()
+def menuprincipale():
+    pass

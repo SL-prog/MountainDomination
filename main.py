@@ -9,6 +9,8 @@
 #Importation et initialisation de la bibliotheque Pygame
 import pygame
 from pygame.locals import *
+from pygame import font, mask, Surface, SRCALPHA
+from pygame.sprite import Sprite, collide_mask, collide_rect
 pygame.init()
 
 #Importation des autres programmes
@@ -26,18 +28,26 @@ pygame.display.set_icon(pygame.image.load(icon))
 #Chargement du fond
 fond = pygame.image.load(background).convert()
 
-#Chargement et collage des personnages - test
+#Chargement de la montagne + mask + rect
+decor = pygame.image.load(mountain).convert_alpha()
+decor_mask = pygame.mask.from_surface(decor)
+decor_rect = decor.get_rect()
+
+#Chargement et collage des personnages - test - + mask
 image = pygame.image.load(escargot_rouge).convert_alpha()
+image_mask = pygame.mask.from_surface(image)
+image_rect = image.get_rect()
 image_retourne = pygame.transform.flip(image, 1, 0)
-rouge = players.Player(image,image_retourne,200,300)
+
+rouge = players.Player(image,image_retourne,x_rouge,y_rouge)
 # perso_bleu = pygame.image.load(escargot_bleu).convert_alpha()
 # fenetre.blit(perso_bleu, (100,300))
 
-#Rafraichissement/mise a  jour de l'ecran
+#Rafraichissement/mise aÂ  jour de l'ecran
 pygame.display.flip()
 
-#Simule des appuis très rapide sur la touche quand on la maintient
-pygame.key.set_repeat(1, 10)
+#Simule des appuis tres rapide sur la touche quand on la maintient
+pygame.key.set_repeat(1, 1) #(dure appui, temps entre chaque appui)
 
 #BOUCLE Principale
 while not done:
@@ -48,41 +58,53 @@ while not done:
             done = True
 #Front montant appuis touche
         elif event.type == pygame.KEYDOWN:
-#déplacement droite-gauche
+#deplacement droite-gauche
             if event.key == pygame.K_LEFT:
-                sens_perso= False
-                rouge.gauche(vitesse_perso)
+                sens_perso = False
+                gauche = True
             elif event.key == pygame.K_RIGHT:
-                sens_perso= True
-                rouge.droite(vitesse_perso)
-#orientation arme - TEST : changement vitesse
-#           if event.key == pygame.K_UP:
-#                rouge.augmente(1)
-#            if event.key == pygame.K_DOWN:
-#                rouge.augmente(-1)
+                sens_perso = True
+                droite = True
+#saut
+            if event.key == pygame.K_SPACE:
+                saut=True
+
+
 #Front descendant appuis touche
         elif event.type == pygame.KEYUP:
+#fin deplacement droite-gauche
             if event.key == pygame.K_LEFT:
-                rouge.gauche(0)
+                gauche = False
             elif event.key == pygame.K_RIGHT:
-                rouge.droite(0)
+                droite = False
+#fin saut
+            if event.key == pygame.K_SPACE:
+                saut=False
 
 #Afficher le fond du jeu
     fenetre.blit(fond, (0,0))
 
-#Afficher sens - TEST
-    if sens_perso==True:
-        charsens = 'droite'
-    else:
-        charsens = 'gauche'
-    font = pygame.font.Font(None, 50)
-    textsens = font.render(charsens, 1, (0,0,0))
-    fenetre.blit(textsens, (280,10))
+#Afficher la montagne
+    fenetre.blit(decor, (-80,0))
+
+#GÃ©rer mouvement personnages
+    rouge.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite, image_rect, decor_rect)
 
 #Afficher les personnages - TEST
     rouge.affiche(fenetre,sens_perso)
 
-#Rafraichissement/mise a  jour de l'ecran
+#Afficher sens - TEST
+    if sens_perso==True:
+        charsens = 'droite'
+        couleursens=(0,255,0)
+    else:
+        charsens = 'gauche'
+        couleursens = (255,0,0)
+    font = pygame.font.Font(None, 50)
+    textsens = font.render(charsens, 1, couleursens)
+    fenetre.blit(textsens, (260,10))
+
+#Rafraichissement/mise a jour de l'ecran
     pygame.display.flip()
 
 #Limitation de vitesse de la boucle
