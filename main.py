@@ -9,8 +9,6 @@
 #Importation et initialisation de la bibliotheque Pygame
 import pygame
 from pygame.locals import *
-from pygame import font, mask, Surface, SRCALPHA
-from pygame.sprite import Sprite, collide_mask, collide_rect
 pygame.init()
 
 #Importation des autres programmes
@@ -29,21 +27,32 @@ pygame.display.set_icon(pygame.image.load(icon))
 fond = pygame.image.load(background).convert()
 
 #Chargement de la montagne + mask + rect
-decor = pygame.image.load(mountain).convert_alpha()
-decor_mask = pygame.mask.from_surface(decor)
-decor_rect = decor.get_rect()
+decor = pygame.sprite.Sprite()
+decor.image = pygame.image.load(mountain).convert_alpha()
+decor.rect = decor.image.get_rect()
+decor.rect.topleft = -80, 300
+decor.mask = pygame.mask.from_surface(decor.image)
+
 
 #Chargement et collage des personnages - test - + mask
-image = pygame.image.load(escargot_rouge).convert_alpha()
-image_mask = pygame.mask.from_surface(image)
-image_rect = image.get_rect()
-image_retourne = pygame.transform.flip(image, 1, 0)
+image = pygame.sprite.Sprite()
+image.image = pygame.image.load(escargot_rouge).convert_alpha()
+image.rect = image.image.get_rect()
+image.rect.topleft = x_rouge, y_rouge
+image.mask = pygame.mask.from_surface(image.image)
 
-rouge = players.Player(image,image_retourne,x_rouge,y_rouge)
+image_retourne = pygame.sprite.Sprite()
+image_retourne.image = pygame.transform.flip(image.image, 1, 0)
+image_retourne.rect = image_retourne.image.get_rect()
+image_retourne.rect.topleft = x_rouge, y_rouge
+image_retourne.mask = pygame.mask.from_surface(image_retourne.image)
+
+
+rouge = players.Player(decor, image, image_retourne, image.image, image_retourne.image, image.rect.x, image.rect.y)
 # perso_bleu = pygame.image.load(escargot_bleu).convert_alpha()
 # fenetre.blit(perso_bleu, (100,300))
 
-#Rafraichissement/mise aÂ  jour de l'ecran
+#Rafraichissement/mise a jour de l'ecran
 pygame.display.flip()
 
 #Simule des appuis tres rapide sur la touche quand on la maintient
@@ -51,7 +60,6 @@ pygame.key.set_repeat(1, 1) #(dure appui, temps entre chaque appui)
 
 #BOUCLE Principale
 while not done:
-
 #Quitter le jeu
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -85,14 +93,14 @@ while not done:
     fenetre.blit(fond, (0,0))
 
 #Afficher la montagne
-    fenetre.blit(decor, (-80,0))
+    fenetre.blit(decor.image, decor.rect)
 
-#GÃ©rer mouvement personnages
-    rouge.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite, image_rect, decor_rect)
+#Gerer mouvement personnages
+    rouge.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite)
 
 #Afficher les personnages - TEST
-    rouge.affiche(fenetre,sens_perso)
-
+#    rouge.affiche(fenetre, sens_perso, image.rect)
+    fenetre.blit(image.image, image.rect)
 #Afficher sens - TEST
     if sens_perso==True:
         charsens = 'droite'
@@ -103,6 +111,13 @@ while not done:
     font = pygame.font.Font(None, 50)
     textsens = font.render(charsens, 1, couleursens)
     fenetre.blit(textsens, (260,10))
+
+#afficher l'etat de la collision entre les deux sprites - TEST
+    test_collision = pygame.sprite.collide_mask(image, decor)
+    collision_char = "Collision" if test_collision else "Pas collision"
+    collision = font.render(collision_char, 1, (0,0,0))
+    fenetre.blit(collision, (10,30))
+
 
 #Rafraichissement/mise a jour de l'ecran
     pygame.display.flip()

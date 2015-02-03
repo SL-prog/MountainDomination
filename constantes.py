@@ -25,7 +25,7 @@ sens_perso=True  #True = droite, False = gauche
 vitesse_perso_x = 5
 vitesse_perso_y = 7
 x_rouge = 300
-y_rouge = 20
+y_rouge = 150
 gauche = False
 droite = False
 saut = False
