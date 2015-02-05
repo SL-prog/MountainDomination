@@ -16,12 +16,11 @@ titre_fenetre = 'Mountain Domination'
 #Images
 icon = "image/icon.png"
 background = "image/background.png"
-mountain = "image/map-test2.png"
+mountain = "image/map-test3.png"
 escargot_rouge = "image/esc-red.png"
 escargot_bleu = "image/esc-blue.png"
 
-#sens, vitesse et position du personnage
-sens_perso=True  #True = droite, False = gauche
+#vitesse et positions des personnages (TEST)
 vitesse_perso_x = 5
 vitesse_perso_y = 7
 
@@ -34,6 +33,9 @@ gauche = False
 droite = False
 saut = False
 gravite = 0.3
+
+#TEST
+sens_perso = True
 
 #variable fin de la boucle principale
 done=False

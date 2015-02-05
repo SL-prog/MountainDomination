@@ -26,15 +26,15 @@ pygame.display.set_icon(pygame.image.load(icon))
 #Chargement du fond
 fond = pygame.image.load(background).convert()
 
-#Chargement de la montagne + mask + rect -> créer class
+#Chargement de la montagne + mask + rect -> creer class
 decor = pygame.sprite.Sprite()
 decor.image = pygame.image.load(mountain).convert_alpha()
 decor.rect = decor.image.get_rect()
-decor.rect.topleft = -80, 300
+decor.rect.topleft = 0, 0
 decor.mask = pygame.mask.from_surface(decor.image)
 
 rouge = players.Player(decor, escargot_rouge, x_rouge, y_rouge)
-bleu = players.Player(decor, escargot_bleu, x_bleu, y_bleu)
+#bleu = players.Player(decor, escargot_bleu, x_bleu, y_bleu)
 
 #Rafraichissement/mise a jour de l'ecran
 pygame.display.flip()
@@ -52,10 +52,10 @@ while not done:
         elif event.type == pygame.KEYDOWN:
 #deplacement droite-gauche
             if event.key == pygame.K_LEFT:
-                sens_perso = False
+                sens_perso = False #TEST
                 gauche = True
             elif event.key == pygame.K_RIGHT:
-                sens_perso = True
+                sens_perso = True #TEST
                 droite = True
 #saut
             if event.key == pygame.K_UP:
@@ -75,17 +75,17 @@ while not done:
 
 #Gerer mouvement personnages
     rouge.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite)
-#   bleu.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite)
+#    bleu.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite)
 
 #Afficher le fond du jeu
     fenetre.blit(fond, (0,0))
 
-#Afficher la montagne -- Créer class
+#Afficher la montagne -- Creer class
     fenetre.blit(decor.image, decor.rect)
 
 #Afficher les personnages - TEST
-    rouge.affiche(fenetre, sens_perso)
-#   bleu.affiche(sens_perso)
+    rouge.affiche(fenetre)
+#    bleu.affiche(fenetre)
 
 #Afficher sens - TEST
     if sens_perso==True:
