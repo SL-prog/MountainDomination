@@ -22,7 +22,7 @@ escargot_bleu = "image/esc-blue.png"
 
 #vitesse et positions des personnages (TEST)
 vitesse_perso_x = 5
-vitesse_perso_y = 7
+vitesse_perso_y = 5
 
 x_rouge = 300
 y_rouge = 150
@@ -32,7 +32,10 @@ y_bleu = 150
 gauche = False
 droite = False
 saut = False
-gravite = 0.3
+gravite = 0.01
+vitesse_saut= 5
+
+debug = False
 
 #TEST
 sens_perso = True

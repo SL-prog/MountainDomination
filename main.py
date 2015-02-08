@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Name:        Epic Mountain Battle
+# Name:        Mountain Domination
 #
 # Author:      sl-prog
 #
@@ -30,11 +30,11 @@ fond = pygame.image.load(background).convert()
 decor = pygame.sprite.Sprite()
 decor.image = pygame.image.load(mountain).convert_alpha()
 decor.rect = decor.image.get_rect()
-decor.rect.topleft = 0, 0
+decor.rect.topleft = -80, 300
 decor.mask = pygame.mask.from_surface(decor.image)
 
 rouge = players.Player(decor, escargot_rouge, x_rouge, y_rouge)
-#bleu = players.Player(decor, escargot_bleu, x_bleu, y_bleu)
+bleu = players.Player(decor, escargot_bleu, x_bleu, y_bleu)
 
 #Rafraichissement/mise a jour de l'ecran
 pygame.display.flip()
@@ -60,6 +60,9 @@ while not done:
 #saut
             if event.key == pygame.K_UP:
                 saut=True
+#Test
+            if event.key == pygame.K_SPACE:
+                debug=True
 
 
 #Front descendant appuis touche
@@ -73,9 +76,12 @@ while not done:
             if event.key == pygame.K_UP:
                 saut=False
 
+            if event.key == pygame.K_SPACE:
+                debug=False
+
 #Gerer mouvement personnages
-    rouge.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite)
-#    bleu.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite)
+    rouge.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite, debug, vitesse_saut)
+    bleu.mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite, debug, vitesse_saut)
 
 #Afficher le fond du jeu
     fenetre.blit(fond, (0,0))
@@ -85,7 +91,7 @@ while not done:
 
 #Afficher les personnages - TEST
     rouge.affiche(fenetre)
-#    bleu.affiche(fenetre)
+    bleu.affiche(fenetre)
 
 #Afficher sens - TEST
     if sens_perso==True:
