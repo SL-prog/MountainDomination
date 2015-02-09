@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        Mountain Domination
 #
-# Author:      sl-prog
+# Author:      sl-prog et regisseur
 #
 # Licence:     <GNU GENERAL PUBLIC LICENSE>
 #-------------------------------------------------------------------------------
@@ -16,10 +16,14 @@ from constantes import *
 import menu
 import mapgest
 import players
-import interface
+from interface import *
+
+#TEST
+switch = 1
+chargement = 23
+tempsjeu = 44
 
 #Ouverture de la fenetre Pygame
-fenetre = pygame.display.set_mode((largeur_ecran, hauteur_ecran), RESIZABLE) #fenetre de 640*480
 pygame.display.set_caption(titre_fenetre)
 pygame.display.set_icon(pygame.image.load(icon))
 
@@ -103,6 +107,9 @@ while not done:
     font = pygame.font.Font(None, 50)
     textsens = font.render(charsens, 1, couleursens)
     fenetre.blit(textsens, (260,10))
+
+#Afficher l'interface
+    interface(fenetre, arme1, arme2, chargement0, chargement1, chargement2, chargement3, chargement4, horloge, switch, chargement, tempsjeu)
 
 #Rafraichissement/mise a jour de l'ecran
     pygame.display.flip()
