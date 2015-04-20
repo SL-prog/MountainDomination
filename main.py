@@ -10,23 +10,9 @@
 import pygame
 from pygame.locals import *
 pygame.init()
-#Importation du module genereation aleatoire
-from random import randint
-
-#Importation des autres programmes
-from constantes import *
-from menu import *
-import mapgest
-import players
-from interface import *
-
-#TEST
-switch = 1
-chargement = 0
-tour = 1
 
 #-------------------
-
+from menu import *
 #BOUCLE menu
 menu = 1
 #menu2 = False
@@ -41,6 +27,22 @@ if menu==0:
     pygame.quit()
 
 #-------------------
+
+#Importation du module genereation aleatoire
+from random import randint
+
+#Importation des autres programmes
+from constantes import *
+import mapgest
+import players
+from interface import *
+
+#TEST
+switch = 1
+chargement = 0
+tour = 1
+
+
 
 #Ouverture de la fenetre Pygame
 pygame.display.set_caption(titre_fenetre)
@@ -123,7 +125,7 @@ while not done:
             if event.key == pygame.K_d:
                 debug=False
 
-#Gerer mouvement personnages
+#Gerer mouvement personnages - BUG
     for rang in range(0, nombre_perso):
         if rang != numero:
             rouge[rang].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0,  debug, vitesse_saut)
