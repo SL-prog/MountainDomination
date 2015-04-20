@@ -27,8 +27,17 @@ class Player(pygame.sprite.Sprite):
         self.depart_timer, self.fin_timer = False, False
         self.sauter = 0
 
-    def affiche(self, fenetre):
+    def affiche(self, fenetre, vie):
         fenetre.blit(self.image, self.rect)
+#afficher vie perso - TEST
+        vie = str(vie)
+        font = pygame.font.Font(None, 20)
+        if self.fichier == "image/esc-red.png":
+            couleur = (255,0,0)
+        if self.fichier == "image/esc-blue.png":
+            couleur = (0,0,255)
+        vie = font.render(vie, 1, couleur)
+        fenetre.blit(vie, (self.rect.x,self.rect.y-13))
 
 #afficher pos perso - TEST
         char_x = str(self.rect.x)
@@ -40,10 +49,10 @@ class Player(pygame.sprite.Sprite):
         fenetre.blit(yy, (10,50))
 
     def mouvement(self, vitesse_x, vitesse_y, gravite, saut, gauche, droite, debug, vitesse_saut):
-
+# test debug
         if debug == True:
-            self.rect.x = 300
-            self.rect.y = 150
+            self.rect.x = self.x
+            self.rect.y = self.y
 
         if droite == True:
             self.rect.x += vitesse_x
@@ -102,7 +111,9 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y -= 1
                 self.parterre = True
                 vitesse_y = 0
-            if saut == True:
-                while (pygame.sprite.collide_mask(self, self.decor)):
-                    self.rect.y += vitesse_saut
-                vitesse_saut = 0
+# ----------------------BUG----------------------------- #
+            if saut == True and (pygame.sprite.collide_mask(self, self.decor)):
+#                    self.rect.y += vitesse_y
+#                vitesse_y = 0
+                self.rect.y += vitesse_y
+                self.fin_timer = True
