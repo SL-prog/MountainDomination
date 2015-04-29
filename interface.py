@@ -9,8 +9,9 @@
 #Importation des bibliotheques necessaires
 import pygame
 from pygame.locals import *
+from constantes import *
 
-def interface(fenetre, arme1, arme2, chargement0, chargement1, chargement2, chargement3, chargement4, horloge, switch, chargement, tempsjeu, tour, vies1, vies2):
+def interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2):
 #rectangle
     pygame.draw.rect(fenetre, (79, 125, 51), (0, 480, 800, 80), 0) #pixel(s)
     pygame.draw.rect(fenetre, (0, 0, 0), (1, 480, 798, 80), 5)

@@ -32,28 +32,28 @@ class Player(pygame.sprite.Sprite):
 #afficher vie perso - TEST
         vie = str(vie)
         font = pygame.font.Font(None, 20)
-        if self.fichier == "image/esc-red.png":
+        if self.fichier == "image/personnages/esc-red.png":
             couleur = (255,0,0)
-        if self.fichier == "image/esc-blue.png":
+        if self.fichier == "image/personnages/esc-blue.png":
             couleur = (0,0,255)
         vie = font.render(vie, 1, couleur)
         fenetre.blit(vie, (self.rect.x,self.rect.y-13))
 
 #afficher pos perso - TEST
-        char_x = str(self.rect.x)
-        char_y = str(self.rect.y)
-        font = pygame.font.Font(None, 50)
-        xx = font.render(char_x, 1, (0,0,0))
-        fenetre.blit(xx, (10,10))
-        yy = font.render(char_y, 1, (0,0,0))
-        fenetre.blit(yy, (10,50))
+#        char_x = str(self.rect.x)
+#        char_y = str(self.rect.y)
+#        font = pygame.font.Font(None, 50)
+#        xx = font.render(char_x, 1, (0,0,0))
+#        fenetre.blit(xx, (10,10))
+#        yy = font.render(char_y, 1, (0,0,0))
+#        fenetre.blit(yy, (10,50))
 
     def mouvement(self, vitesse_x, vitesse_y, gravite, saut, gauche, droite, debug, vitesse_saut):
 # test debug
         if debug == True:
             self.rect.x = self.x
             self.rect.y = self.y
-
+#-----------------------
         if droite == True:
             self.rect.x += vitesse_x
             self.image = pygame.image.load(self.fichier).convert_alpha()
@@ -116,4 +116,5 @@ class Player(pygame.sprite.Sprite):
 #                    self.rect.y += vitesse_y
 #                vitesse_y = 0
                 self.rect.y += vitesse_y
+                vitesse_y = 0
                 self.fin_timer = True

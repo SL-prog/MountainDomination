@@ -11,8 +11,14 @@ import pygame
 from pygame.locals import *
 pygame.init()
 
+#Importation des autres programmes
+from constantes import *
+from mapgest import *
+import players
+from interface import *
 #-------------------
 from menu import *
+
 #BOUCLE menu
 menu = 1
 #menu2 = False
@@ -20,69 +26,38 @@ while menu>0 and menu<4:
     if menu==1:
         menu = menuprincipal()
     if menu==2:
-        menu = menumap()
+        menu, fondchoix, mapchoix = menumap()
 #    if menu == 3:
 #        menu = menureglage()
-if menu==0:
-    pygame.quit()
-
 #-------------------
 
-#Importation du module genereation aleatoire
-from random import randint
-
-#Importation des autres programmes
-from constantes import *
-import mapgest
-import players
-from interface import *
 
 #TEST
 switch = 1
 chargement = 0
 tour = 1
-
-
-
-#Ouverture de la fenetre Pygame
-pygame.display.set_caption(titre_fenetre)
-pygame.display.set_icon(pygame.image.load(icon))
-
-#Chargement du fond
-fond = pygame.image.load(background).convert()
-
-#Chargement de la montagne + mask + rect -> creer class
-decor = pygame.sprite.Sprite()
-decor.image = pygame.image.load(mountain).convert_alpha()
-decor.rect = decor.image.get_rect()
-decor.rect.topleft = 0,0
-decor.mask = pygame.mask.from_surface(decor.image)
-
-#generation des personnages :
 nombre_perso = 2 #nombre de personnage par equipe
-vies1 = [viemax]*nombre_perso #on donne de la vie a chaque perso
-vies2 = [viemax]*nombre_perso
+viemax = 100
 
-rouge = [0]*nombre_perso
-bleu = [0]*nombre_perso
-#creer les objets personnages
-for rang in range(nombre_perso):
-    rouge[rang] = players.Player(decor, escargot_rouge, randint(100, 700), 50)
-    bleu[rang] = players.Player(decor, escargot_bleu, randint(100, 700), 50)
-
-
-#Rafraichissement/mise a jour de l'ecran
-pygame.display.flip()
-
-#Simule des appuis tres rapide sur la touche quand on la maintient
-pygame.key.set_repeat(1, 1) #(duree appui, temps entre chaque appui)
+#variable fin de la boucle principale
+jeu = False
+if menu == 4:
+    jeu = True
+    #Ouverture de la fenetre Pygame
+    pygame.display.set_caption(titre_fenetre)
+    #initialisation de la map
+    fond, decor, rouge, bleu, vies1, vies2 = mapinit(nombre_perso, viemax, fondchoix, mapchoix)
+    #Rafraichissement/mise a jour de l'ecran
+    pygame.display.flip()
+    #Simule des appuis tres rapide sur la touche quand on la maintient
+    pygame.key.set_repeat(1, 1) #(duree appui, temps entre chaque appui)
 
 #BOUCLE Principale
-while not done:
+while jeu:
 #Quitter le jeu
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            done = True
+            jeu = False
 #Front montant appuis touche
         elif event.type == pygame.KEYDOWN:
 #deplacement droite-gauche
@@ -125,11 +100,15 @@ while not done:
             if event.key == pygame.K_d:
                 debug=False
 
-#Gerer mouvement personnages - BUG
-    for rang in range(0, nombre_perso):
+#Gerer mouvement personnages - ajouter impossibilité controle mort
+    for rang in range(nombre_perso):
         if rang != numero:
             rouge[rang].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0,  debug, vitesse_saut)
             bleu[rang].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0, debug, vitesse_saut)
+    if tour == 1:
+        bleu[numero].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0, debug, vitesse_saut)
+    if tour == 2:
+        rouge[numero].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0, debug, vitesse_saut)
 
     if tour == 1:
         rouge[numero].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite, debug, vitesse_saut)
@@ -143,25 +122,30 @@ while not done:
 #Afficher la montagne -- Creer class
     fenetre.blit(decor.image, decor.rect)
 
+    print(numero)
+
 #Afficher les personnages - TEST
-    for rang in  range(nombre_perso):
-        rouge[rang].affiche(fenetre, vies1[rang])
-        bleu[rang].affiche(fenetre, vies2[rang])
+    for rang in range(nombre_perso):
+        if vies1[rang]>0:
+            rouge[rang].affiche(fenetre, vies1[rang])
+        if vies2[rang]>0:
+            bleu[rang].affiche(fenetre, vies2[rang])
 
 #Afficher sens - TEST
-    if sens_perso==True:
-        charsens = 'droite'
-        couleursens=(0,255,0)
-    else:
-        charsens = 'gauche'
-        couleursens = (255,0,0)
-    font = pygame.font.Font(None, 50)
-    textsens = font.render(charsens, 1, couleursens)
-    fenetre.blit(textsens, (370,10))
+#    if sens_perso==True:
+#        charsens = 'droite'
+#        couleursens=(0,255,0)
+#    else:
+#        charsens = 'gauche'
+#        couleursens = (255,0,0)
+#    font = pygame.font.Font(None, 50)
+#    textsens = font.render(charsens, 1, couleursens)
+#    fenetre.blit(textsens, (370,10))
 
 #Afficher l'interface
-    interface(fenetre, arme1, arme2, chargement0, chargement1, chargement2, chargement3, chargement4, horloge, switch, chargement, tempsjeu, tour, vies1, vies2)
+    interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2)
 
+#----------------------
 #TEST BARRE CHARGEMENT
     chargement+=1
     if chargement == 35:
@@ -171,6 +155,7 @@ while not done:
     vies2[0]+=1
     if vies2[0] == 200:
         vies2[0] = 0
+#----------------------
 
 #Rafraichissement/mise a jour de l'ecran
     pygame.display.flip()
