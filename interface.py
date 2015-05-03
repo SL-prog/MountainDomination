@@ -72,3 +72,27 @@ def interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2):
     else:
         xtemps = 626
     fenetre.blit(temps, (xtemps,508))
+
+
+def passertour(fenetre, tour):
+    attendre = True
+    jeu = True
+    if tour==1:
+        tour=2
+        fenetre.blit(tourjoueur2, (0,130))
+    else :
+        tour=1
+        fenetre.blit(tourjoueur1, (0,130))
+    pygame.display.flip()
+    while attendre==True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                jeu = False
+                attendre = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    attendre = False
+    return tour, jeu
+
+
+

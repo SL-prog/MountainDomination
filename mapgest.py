@@ -13,13 +13,20 @@ import players
 #Importation du module genereation aleatoire
 from random import randint
 
+from PIL import Image, ImageDraw
+
 def mapinit(nombre_perso, viemax, fondchoix, mapchoix):
+
+    #copie image map
+    mapcopie = Image.open(mapchoix)
+    mapcopie.save("image/mapcopie.png", 'PNG')
+
     #Chargement du fond
     fond = pygame.image.load(fondchoix).convert()
 
     #Chargement de la montagne + mask + rect -> creer class
     decor = pygame.sprite.Sprite()
-    decor.image = pygame.image.load(mapchoix).convert_alpha()
+    decor.image = pygame.image.load("image/mapcopie.png").convert_alpha()
     decor.rect = decor.image.get_rect()
     decor.rect.topleft = 0,0
     decor.mask = pygame.mask.from_surface(decor.image)
@@ -36,3 +43,28 @@ def mapinit(nombre_perso, viemax, fondchoix, mapchoix):
         bleu[rang] = players.Player(decor, escargot_bleu, randint(100, 700), 50)
 
     return fond, decor, rouge, bleu, vies1, vies2
+
+
+def mapMAJ(nombre_perso, rouge, bleu, ximpact, yimpact, arme):
+    if arme == 1:
+        rayon = 45
+    if arme == 2:
+        rayon = 65
+
+    mapmaj = Image.open("image/mapcopie.png")
+    draw = ImageDraw.Draw(mapmaj)
+    #cercle transparent
+    draw.ellipse((ximpact-rayon, yimpact-rayon, ximpact+rayon, yimpact+rayon), fill=(0, 0, 0, 0))
+    mapmaj.save("image/mapcopie.png", 'PNG')
+
+    decor = pygame.sprite.Sprite()
+    decor.image = pygame.image.load("image/mapcopie.png").convert_alpha()
+    decor.rect = decor.image.get_rect()
+    decor.rect.topleft = 0,0
+    decor.mask = pygame.mask.from_surface(decor.image)
+
+    for rang in range(nombre_perso):
+        rouge[rang].decor = decor
+        bleu[rang].decor = decor
+
+    return decor

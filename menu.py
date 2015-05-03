@@ -9,7 +9,6 @@
 import pygame
 from pygame.locals import *
 from constantes import *
-from math import *
 
 def menuprincipal():
     # Initialisation de la fenetre d'affichage
@@ -276,7 +275,7 @@ def menureglage():
                     return 2
                 #bouton suivant
                 elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
-                    return 4 #jouer
+                    return 4, sliderequipe.valeur, slidervie.valeur, sliderduree.valeur #jouer
 
                 sliderequipe.clic(event)
                 slidervie.clic(event)
@@ -301,8 +300,6 @@ class Slider:
         self.mini = mini
         self.valeur = valeur
         self.font = pygame.font.Font(None, 35)
-
-        self.test = 0
 
     def clic(self, event):
         if (event.pos[0] >= self.x)  and (event.pos[0]<= self.x+200) and (event.pos[1] >= self.y)  and (event.pos[1] <= self.y+15):

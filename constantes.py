@@ -36,16 +36,17 @@ chargement3 = pygame.image.load("image/interface/barre3.png").convert_alpha()
 chargement4 = pygame.image.load("image/interface/barre4.png").convert_alpha()
 horloge = pygame.image.load("image/interface/horloge.png").convert_alpha()
 
+tourjoueur1 = pygame.image.load("image/interface/tourjoueur1.png").convert_alpha()
+tourjoueur2 = pygame.image.load("image/interface/tourjoueur2.png").convert_alpha()
+
 
 gauche = False
 droite = False
 saut = False
 
-duree_tour = 10
 seconde = pygame.time.get_ticks() + 1000
-tempsjeu = duree_tour
 
-numero = 0 #doit rester aÃ‚Â  0
+numero = 0 #doit rester a 0
 
 #TEST
 sens_perso = True

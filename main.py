@@ -28,29 +28,27 @@ while menu>0 and menu<4:
     if menu==2:
         menu, fondchoix, mapchoix = menumap()
     if menu == 3:
-        menu = menureglage()
+        menu, nombre_perso, viemax, duree_tour = menureglage()
 #-------------------
 
 
 #TEST
 switch = 1
 chargement = 0
-tour = 1
-nombre_perso = 2 #nombre de personnage par equipe
-viemax = 100
 
 #variable fin de la boucle principale
 jeu = False
 if menu == 4:
-    jeu = True
     #Ouverture de la fenetre Pygame
     pygame.display.set_caption(titre_fenetre)
     #initialisation de la map
     fond, decor, rouge, bleu, vies1, vies2 = mapinit(nombre_perso, viemax, fondchoix, mapchoix)
+    tempsjeu = duree_tour
     #Rafraichissement/mise a jour de l'ecran
     pygame.display.flip()
     #Simule des appuis tres rapide sur la touche quand on la maintient
     pygame.key.set_repeat(1, 1) #(duree appui, temps entre chaque appui)
+    tour, jeu = passertour(fenetre, 2)
 
 #BOUCLE Principale
 while jeu:
@@ -77,7 +75,7 @@ while jeu:
                 switch=2
 
             if event.key == pygame.K_SPACE:
-                pass
+                decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch)
 #Test touche D
             if event.key == pygame.K_d:
                 debug=True
@@ -94,8 +92,8 @@ while jeu:
             if event.key == pygame.K_UP:
                 saut=False
 
-            if event.key == pygame.K_SPACE:
-                pass
+#            if event.key == pygame.K_SPACE:
+#                pass
 #touche D
             if event.key == pygame.K_d:
                 debug=False
@@ -156,23 +154,22 @@ while jeu:
         vies2[0] = 0
 #----------------------
 
-#Rafraichissement/mise a jour de l'ecran
-    pygame.display.flip()
-
 #timer temps jeu
     if pygame.time.get_ticks() > seconde:
         tempsjeu-=1
         seconde = pygame.time.get_ticks() + 1000
     if tempsjeu == -1:
-        if tour==1:
-            tour=2
-        else :
-            tour=1
+        saut, gauche, droite = 0,0,0
+        if tour == 2:
             numero+=1
             if numero == nombre_perso:
                 numero = 0
+        tour, jeu = passertour(fenetre, tour)
         tempsjeu = duree_tour
 
+
+#Rafraichissement/mise a jour de l'ecran
+    pygame.display.flip()
 #Limitation de vitesse de la boucle
     pygame.time.Clock().tick(30)
 
