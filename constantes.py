@@ -37,21 +37,15 @@ chargement4 = pygame.image.load("image/interface/barre4.png").convert_alpha()
 horloge = pygame.image.load("image/interface/horloge.png").convert_alpha()
 
 
-#vitesse et positions des personnages (TEST)
-vitesse_perso_x = 5
-vitesse_perso_y = 5
-
 gauche = False
 droite = False
 saut = False
-gravite = 0.01
-vitesse_saut= 5
 
-duree_tour = 5
+duree_tour = 10
 seconde = pygame.time.get_ticks() + 1000
 tempsjeu = duree_tour
 
-numero = 0 #doit rester aÂ  0
+numero = 0 #doit rester aÃ‚Â  0
 
 #TEST
 sens_perso = True

@@ -27,8 +27,8 @@ while menu>0 and menu<4:
         menu = menuprincipal()
     if menu==2:
         menu, fondchoix, mapchoix = menumap()
-#    if menu == 3:
-#        menu = menureglage()
+    if menu == 3:
+        menu = menureglage()
 #-------------------
 
 
@@ -100,20 +100,20 @@ while jeu:
             if event.key == pygame.K_d:
                 debug=False
 
-#Gerer mouvement personnages - ajouter impossibilité controle mort
+#Gerer mouvement personnages - ajouter impossibilite controle mort
     for rang in range(nombre_perso):
         if rang != numero:
-            rouge[rang].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0,  debug, vitesse_saut)
-            bleu[rang].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0, debug, vitesse_saut)
+            rouge[rang].mouvement(0, 0, 0, debug)
+            bleu[rang].mouvement(0, 0, 0, debug)
     if tour == 1:
-        bleu[numero].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0, debug, vitesse_saut)
+        bleu[numero].mouvement(0, 0, 0, debug)
     if tour == 2:
-        rouge[numero].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, 0, 0, 0, debug, vitesse_saut)
+        rouge[numero].mouvement(0, 0, 0, debug)
 
     if tour == 1:
-        rouge[numero].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite, debug, vitesse_saut)
+        rouge[numero].mouvement(saut, gauche, droite, debug)
     if tour == 2:
-        bleu[numero].mouvement(vitesse_perso_x, vitesse_perso_y, gravite, saut, gauche, droite, debug, vitesse_saut)
+        bleu[numero].mouvement(saut, gauche, droite, debug)
 
 
 #Afficher le fond du jeu
@@ -122,11 +122,10 @@ while jeu:
 #Afficher la montagne -- Creer class
     fenetre.blit(decor.image, decor.rect)
 
-    print(numero)
 
 #Afficher les personnages - TEST
     for rang in range(nombre_perso):
-        if vies1[rang]>0:
+        if vies1[rang]>0: #pas afficher mort
             rouge[rang].affiche(fenetre, vies1[rang])
         if vies2[rang]>0:
             bleu[rang].affiche(fenetre, vies2[rang])

@@ -24,19 +24,27 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.parterre = False
 
+        #vitesse du personnage (TEST)
+        self.vitesse_x = 5
+#        self.vitesse_y = 5
+#        self.vitesse_saut = 5
+        self.gravite = 0.01
+
         self.depart_timer, self.fin_timer = False, False
         self.sauter = 0
+
+        self.font = pygame.font.Font(None, 20)
 
     def affiche(self, fenetre, vie):
         fenetre.blit(self.image, self.rect)
 #afficher vie perso - TEST
         vie = str(vie)
-        font = pygame.font.Font(None, 20)
+
         if self.fichier == "image/personnages/esc-red.png":
             couleur = (255,0,0)
         if self.fichier == "image/personnages/esc-blue.png":
             couleur = (0,0,255)
-        vie = font.render(vie, 1, couleur)
+        vie = self.font.render(vie, 1, couleur)
         fenetre.blit(vie, (self.rect.x,self.rect.y-13))
 
 #afficher pos perso - TEST
@@ -48,19 +56,21 @@ class Player(pygame.sprite.Sprite):
 #        yy = font.render(char_y, 1, (0,0,0))
 #        fenetre.blit(yy, (10,50))
 
-    def mouvement(self, vitesse_x, vitesse_y, gravite, saut, gauche, droite, debug, vitesse_saut):
-# test debug
+    def mouvement(self, saut, gauche, droite, debug):
+        vitesse_y = 5
+        vitesse_saut = 5
+# test debug------------
         if debug == True:
             self.rect.x = self.x
             self.rect.y = self.y
 #-----------------------
         if droite == True:
-            self.rect.x += vitesse_x
+            self.rect.x += self.vitesse_x
             self.image = pygame.image.load(self.fichier).convert_alpha()
             self.mask = pygame.mask.from_surface(self.image)
 
         if gauche == True:
-            self.rect.x -= vitesse_x
+            self.rect.x -= self.vitesse_x
             self.image = self.image_retourne
             self.mask = pygame.mask.from_surface(self.image)
 
@@ -80,7 +90,7 @@ class Player(pygame.sprite.Sprite):
 
         if not self.parterre:
             if self.fin_timer:
-                vitesse_y += gravite  #appliquer la gravite
+                vitesse_y += self.gravite  #appliquer la gravite
 			 #attraction maximale
                 if vitesse_y > 30:
                     vitesse_y = 30
@@ -88,10 +98,8 @@ class Player(pygame.sprite.Sprite):
             if not self.fin_timer:
                 self.rect.y -= vitesse_saut #sauter
 
-
-
 		# faire la collision avec les x
-        self.collision(vitesse_x, 0, gauche, droite, False)
+        self.collision(self.vitesse_x, 0, gauche, droite, False)
         if saut == False:
             self.rect.y += vitesse_y
 		#en l'air
@@ -104,17 +112,33 @@ class Player(pygame.sprite.Sprite):
             #empeche le perso d'etre blitte dans la map
             if gauche == True: self.rect.x += vitesse_x
             if droite == True: self.rect.x -= vitesse_x
-
             if saut == False:
                 #pour que le perso reste sur le sol
                 while (pygame.sprite.collide_mask(self, self.decor)):
                     self.rect.y -= 1
                 self.parterre = True
                 vitesse_y = 0
+
 # ----------------------BUG----------------------------- #
-            if saut == True and (pygame.sprite.collide_mask(self, self.decor)):
+            if saut == True:
+#                while (pygame.sprite.collide_mask(self, self.decor)):
+                self.rect.y += self.vitesse_saut
+                self.parterre = False
+                vitesse_y = 0
+
+ #           if saut == True:
+ #               #pour que le perso reste sur le sol
+ #               self.rect.y += self.vitesse_y
+ #               self.parterre = True
+ #               self.vitesse_y = 0
+
+
+
+        #    and (pygame.sprite.collide_mask(self, self.decor)):
 #                    self.rect.y += vitesse_y
 #                vitesse_y = 0
-                self.rect.y += vitesse_y
-                vitesse_y = 0
-                self.fin_timer = True
+         #       self.rect.y += vitesse_y
+         #       self.vitesse_y = 0
+         #       self.fin_timer = True
+
+

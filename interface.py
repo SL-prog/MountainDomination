@@ -29,11 +29,11 @@ def interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2):
 
     font = pygame.font.Font(None, 30)
     if tour == 1 :
-        joueur = 'Joueur 1'
+        joueur = 'Equipe 1'
         couleur = (255,0,0)
 
     else:
-        joueur = 'Joueur 2'
+        joueur = 'Equipe 2'
         couleur = (0,0,255)
 
     tour = font.render(joueur, 1, couleur)
