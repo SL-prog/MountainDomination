@@ -19,10 +19,6 @@ fenetre = pygame.display.set_mode((largeur_ecran, hauteur_ecran)) #fenetre de 64
 icon = "image/interface/icon.png"
 pygame.display.set_icon(pygame.image.load(icon))
 
-#Images
-escargot_rouge = "image/personnages/esc-red.png"
-escargot_bleu = "image/personnages/esc-blue.png"
-
 #bazooka ="image/bazooka" #image arme
 grenade = "image/personnages/prj_grenade.png"  #image projectile aussi utilisee pour image arme
 rocket = "image/personnages/prj_rocket.png" #image projectile

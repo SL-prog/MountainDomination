@@ -15,7 +15,7 @@ from random import randint
 
 from PIL import Image, ImageDraw
 
-def mapinit(nombre_perso, viemax, fondchoix, mapchoix):
+def mapinit(skin1, skin2, nombre_perso, viemax, fondchoix, mapchoix):
 
     #copie image map
     mapcopie = Image.open(mapchoix)
@@ -39,8 +39,8 @@ def mapinit(nombre_perso, viemax, fondchoix, mapchoix):
     bleu = [0]*nombre_perso
     #creer les objets personnages
     for rang in range(nombre_perso):
-        rouge[rang] = players.Player(decor, escargot_rouge, randint(100, 700), 50)
-        bleu[rang] = players.Player(decor, escargot_bleu, randint(100, 700), 50)
+        rouge[rang] = players.Player(decor, skin1, randint(100, 700), 50, "red")
+        bleu[rang] = players.Player(decor, skin2, randint(100, 700), 50, "blue")
 
     return fond, decor, rouge, bleu, vies1, vies2
 

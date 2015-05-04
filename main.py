@@ -28,7 +28,7 @@ while menu>0 and menu<4:
     if menu==2:
         menu, fondchoix, mapchoix = menumap()
     if menu == 3:
-        menu, nombre_perso, viemax, duree_tour = menureglage()
+        menu, skin1, skin2, nombre_perso, viemax, duree_tour = menureglage()
 #-------------------
 
 
@@ -42,7 +42,7 @@ if menu == 4:
     #Ouverture de la fenetre Pygame
     pygame.display.set_caption(titre_fenetre)
     #initialisation de la map
-    fond, decor, rouge, bleu, vies1, vies2 = mapinit(nombre_perso, viemax, fondchoix, mapchoix)
+    fond, decor, rouge, bleu, vies1, vies2 = mapinit(skin1, skin2, nombre_perso, viemax, fondchoix, mapchoix)
     tempsjeu = duree_tour
     #Rafraichissement/mise a jour de l'ecran
     pygame.display.flip()

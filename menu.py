@@ -227,8 +227,18 @@ def menureglage():
     slidervie = Slider(296, 184, 50, 200, 100)
     sliderduree = Slider(296, 239, 10, 80, 60)
 
+    bouton1 = 1
+    bouton2 = 1
+
+    skin1 = "image/personnages/skinred1.png"
+    skin2 = "image/personnages/skinblue1.png"
+
+    affiche1 = pygame.image.load("image/boutonsmenu/btred1.png").convert_alpha()
+    affiche2 = pygame.image.load("image/boutonsmenu/btblue1.png").convert_alpha()
+
     # Boucle infinie
     while 1:
+
         # Blitter le tout dans la fenetre
         fenetre.blit(fond, (0, 0))
 
@@ -249,12 +259,17 @@ def menureglage():
     # Et voici le texte :
         fenetre.blit(text, (622,492))
 
+        fenetre.blit(affiche1, (198, 358))
+        fenetre.blit(affiche2, (475, 358))
+
+
+
 #---------------------------
 
         for event in pygame.event.get():
 
             if event.type == QUIT:
-                return 0
+                return 0, 0, 0, 0, 0, 0
 
             if event.type == MOUSEMOTION:
 
@@ -269,13 +284,27 @@ def menureglage():
                     couleur_suivant = (167,103,38)
 
             if event.type == MOUSEBUTTONDOWN and event.button == 1 :
+                if (event.pos[0] >= 198)  and (event.pos[0]<= 298) and (event.pos[1] >= 358)  and (event.pos[1] <= 458):
+                    bouton1 += 1
+                    if bouton1 > 7 :
+                        bouton1 = 1
+                    affiche1 = pygame.image.load("image/boutonsmenu/btred"+str(bouton1)+".png").convert_alpha()
+                    skin1 = "image/personnages/skinred"+str(bouton1)+".png"
+
+
+                if (event.pos[0] >= 475)  and (event.pos[0]<= 575) and (event.pos[1] >= 358)  and (event.pos[1] <= 458):
+                    bouton2 += 1
+                    if bouton2 > 7 :
+                        bouton2 = 1
+                    affiche2 = pygame.image.load("image/boutonsmenu/btblue"+str(bouton2)+".png").convert_alpha()
+                    skin2 = "image/personnages/skinblue"+str(bouton2)+".png"
 #----------------
                 #bouton retour
-                if (event.pos[0] >= 20)  and (event.pos[0]<= 200) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
-                    return 2
+                elif (event.pos[0] >= 20)  and (event.pos[0]<= 200) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
+                    return 2, 0, 0, 0, 0, 0
                 #bouton suivant
                 elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
-                    return 4, sliderequipe.valeur, slidervie.valeur, sliderduree.valeur #jouer
+                    return 4, skin1, skin2, sliderequipe.valeur, slidervie.valeur, sliderduree.valeur #jouer
 
                 sliderequipe.clic(event)
                 slidervie.clic(event)

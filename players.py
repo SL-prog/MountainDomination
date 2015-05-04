@@ -11,12 +11,13 @@ from pygame.locals import *
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, decor, fichier, x, y):
+    def __init__(self, decor, fichier, x, y, skin):
         pygame.sprite.Sprite.__init__(self)
         self.decor = decor
         self.fichier = fichier
         self.x = x
         self.y = y
+        self.skin = skin
         self.image = pygame.image.load(self.fichier).convert_alpha()
         self.image_retourne = pygame.transform.flip(self.image, 1, 0)
         self.rect = self.image.get_rect()
@@ -40,9 +41,9 @@ class Player(pygame.sprite.Sprite):
 #afficher vie perso - TEST
         vie = str(vie)
 
-        if self.fichier == "image/personnages/esc-red.png":
+        if self.skin == "red":
             couleur = (255,0,0)
-        if self.fichier == "image/personnages/esc-blue.png":
+        if self.skin == "blue":
             couleur = (0,0,255)
         vie = self.font.render(vie, 1, couleur)
         fenetre.blit(vie, (self.rect.x,self.rect.y-13))
