@@ -11,13 +11,15 @@ from pygame.locals import *
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, decor, fichier, x, y, skin):
+    def __init__(self, rang, decor, fichier, x, y, couleurperso, angle = 0):
         pygame.sprite.Sprite.__init__(self)
+        self.cote = "droite"
+        self.rang = rang
         self.decor = decor
         self.fichier = fichier
         self.x = x
         self.y = y
-        self.skin = skin
+        self.couleurperso = couleurperso
         self.image = pygame.image.load(self.fichier).convert_alpha()
         self.image_retourne = pygame.transform.flip(self.image, 1, 0)
         self.rect = self.image.get_rect()
@@ -36,17 +38,27 @@ class Player(pygame.sprite.Sprite):
 
         self.font = pygame.font.Font(None, 20)
 
-    def affiche(self, fenetre, vie):
+        self.angle = angle
+        self.imgbaz = pygame.image.load("image/personnages/arme1.png").convert_alpha()
+        self.imggren = pygame.image.load("image/personnages/arme2.png").convert_alpha()
+        self.armeaffiche = self.imgbaz
+        self.switch = 1
+
+    def affiche(self, fenetre, vie, tour, numero):
         fenetre.blit(self.image, self.rect)
 #afficher vie perso - TEST
         vie = str(vie)
 
-        if self.skin == "red":
+        if self.couleurperso == "red":
             couleur = (255,0,0)
-        if self.skin == "blue":
+        if self.couleurperso == "blue":
             couleur = (0,0,255)
         vie = self.font.render(vie, 1, couleur)
         fenetre.blit(vie, (self.rect.x,self.rect.y-13))
+        #afficher que l'arme du joueur
+        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
+            self.armeaffiche = rotation(self.armeaffiche, self.angle)
+            fenetre.blit(self.armeaffiche, (self.rect.x+10,self.rect.y+10))
 
 #afficher pos perso - TEST
 #        char_x = str(self.rect.x)
@@ -57,28 +69,58 @@ class Player(pygame.sprite.Sprite):
 #        yy = font.render(char_y, 1, (0,0,0))
 #        fenetre.blit(yy, (10,50))
 
-    def mouvement(self, saut, gauche, droite, debug):
-        vitesse_y = 5
-        vitesse_saut = 5
+    def mouvement(self, tour, numero, saut, gauche, droite, debug, angle, switch):
 # test debug------------
         if debug == True:
             self.rect.x = self.x
             self.rect.y = self.y
 #-----------------------
-        if droite == True:
-            self.rect.x += self.vitesse_x
-            self.image = pygame.image.load(self.fichier).convert_alpha()
-            self.mask = pygame.mask.from_surface(self.image)
 
-        if gauche == True:
-            self.rect.x -= self.vitesse_x
-            self.image = self.image_retourne
-            self.mask = pygame.mask.from_surface(self.image)
+        vitesse_y = 5
+        vitesse_saut = 5
 
-        if saut and self.parterre:
-            self.depart_timer = True
-            self.fin_timer = False
-            self.rect.y -= vitesse_saut
+        #déterminer si c'est son tour de jeu :
+        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
+            #inclinaison arme
+            if angle == "+":
+                self.angle += 1
+
+            if angle == "-":
+                self.angle -= 1
+            print(self.angle)
+
+            #afficher arme
+            if switch != self.switch:
+                self.switch = switch
+            if self.switch == 1:
+                self.armeaffiche = self.imgbaz
+            if self.switch == 2:
+                self.armeaffiche = self.imggren
+
+            if droite == True:
+                self.rect.x += self.vitesse_x
+                if self.cote == "gauche":
+                    self.cote = "droite"
+                    self.image = pygame.image.load(self.fichier).convert_alpha()
+                    self.mask = pygame.mask.from_surface(self.image)
+                    self.armeaffiche =  pygame.transform.flip(self.armeaffiche, 1, 0)
+
+            if gauche == True:
+                self.rect.x -= self.vitesse_x
+                if self.cote == "droite":
+                    self.cote = "gauche"
+                    self.image = self.image_retourne
+                    self.mask = pygame.mask.from_surface(self.image)
+                    self.armeaffiche =  pygame.transform.flip(self.armeaffiche, 1, 0)
+
+            if saut and self.parterre:
+                self.depart_timer = True
+                self.fin_timer = False
+                self.rect.y -= vitesse_saut
+        else:
+            saut = 0
+            droite = 0
+            gauche = 0
 
         if not saut:
             self.fin_timer = True
@@ -142,4 +184,10 @@ class Player(pygame.sprite.Sprite):
          #       self.vitesse_y = 0
          #       self.fin_timer = True
 
-
+def rotation(image, angle): #rotation arme
+    orig_rect = image.get_rect()
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = orig_rect.copy()
+    rot_rect.center = rot_image.get_rect().center
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image

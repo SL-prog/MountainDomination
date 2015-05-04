@@ -215,7 +215,7 @@ def menureglage():
     couleur_retour = (30,127,203)
     couleur_suivant = (167,103,38)
     # Initialisation de la fenetre d'affichage
-    pygame.display.set_caption("Mountain Domination - Réglages")
+    pygame.display.set_caption("Mountain Domination - RÃ©glages")
 
     # Remplissage de l'arriere-plan
     fond = pygame.image.load("image/backgrounds/backgroundmenureglages.png").convert()
@@ -333,9 +333,11 @@ class Slider:
     def clic(self, event):
         if (event.pos[0] >= self.x)  and (event.pos[0]<= self.x+200) and (event.pos[1] >= self.y)  and (event.pos[1] <= self.y+15):
             self.valeur = int((self.maxi-self.mini)*(event.pos[0]-self.x)/200)+self.mini
+        if (event.pos[0] >= self.x+200)  and (event.pos[0]<= self.x+215) and (event.pos[1] >= self.y)  and (event.pos[1] <= self.y+15):
+            self.valeur = self.maxi
 
     def affiche(self, fenetre):
-        pygame.draw.rect(fenetre, (127, 106, 0), (self.x, self.y, 200, 15), 0)
+        pygame.draw.rect(fenetre, (127, 106, 0), (self.x, self.y, 215, 15), 0)
         pygame.draw.rect(fenetre, (255, 216, 0), ((self.valeur-self.mini)*200/(self.maxi-self.mini) + self.x, self.y, 15, 15), 0)
         texte = self.font.render(str(self.valeur), 1, (0,0,0))
-        fenetre.blit(texte, (self.x+215,self.y-5))
+        fenetre.blit(texte, (self.x+235,self.y-5))

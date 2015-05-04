@@ -75,11 +75,16 @@ while jeu:
                 switch=2
 
             if event.key == pygame.K_SPACE:
-                decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch)
+                if chargement < 35:
+                    chargement+=1
 #Test touche D
             if event.key == pygame.K_d:
                 debug=True
 
+            if event.key == pygame.K_f:
+                angle = "+"
+            if event.key == pygame.K_g:
+                angle = "-"
 
 #Front descendant appuis touche
         elif event.type == pygame.KEYUP:
@@ -92,27 +97,23 @@ while jeu:
             if event.key == pygame.K_UP:
                 saut=False
 
-#            if event.key == pygame.K_SPACE:
-#                pass
+            if event.key == pygame.K_SPACE:
+                decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch)
+                chargement = 0
 #touche D
             if event.key == pygame.K_d:
                 debug=False
 
+            if event.key == pygame.K_f:
+                angle = ""
+            if event.key == pygame.K_g:
+                angle = ""
+
 #Gerer mouvement personnages - ajouter impossibilite controle mort
     for rang in range(nombre_perso):
-        if rang != numero:
-            rouge[rang].mouvement(0, 0, 0, debug)
-            bleu[rang].mouvement(0, 0, 0, debug)
-    if tour == 1:
-        bleu[numero].mouvement(0, 0, 0, debug)
-    if tour == 2:
-        rouge[numero].mouvement(0, 0, 0, debug)
-
-    if tour == 1:
-        rouge[numero].mouvement(saut, gauche, droite, debug)
-    if tour == 2:
-        bleu[numero].mouvement(saut, gauche, droite, debug)
-
+        rouge[rang].mouvement(tour, numero, saut, gauche, droite, debug, angle, switch)
+        bleu[rang].mouvement(tour, numero, saut, gauche, droite, debug, angle, switch)
+    print(angle)
 
 #Afficher le fond du jeu
     fenetre.blit(fond, (0,0))
@@ -124,9 +125,9 @@ while jeu:
 #Afficher les personnages - TEST
     for rang in range(nombre_perso):
         if vies1[rang]>0: #pas afficher mort
-            rouge[rang].affiche(fenetre, vies1[rang])
+            rouge[rang].affiche(fenetre, vies1[rang], tour, numero)
         if vies2[rang]>0:
-            bleu[rang].affiche(fenetre, vies2[rang])
+            bleu[rang].affiche(fenetre, vies2[rang], tour, numero)
 
 #Afficher sens - TEST
 #    if sens_perso==True:
@@ -143,10 +144,6 @@ while jeu:
     interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2)
 
 #----------------------
-#TEST BARRE CHARGEMENT
-    chargement+=1
-    if chargement == 35:
-        chargement = 0
 
 #TEST BARRE VIE
     vies2[0]+=1

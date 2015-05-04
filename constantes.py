@@ -40,6 +40,8 @@ gauche = False
 droite = False
 saut = False
 
+angle = ""
+
 seconde = pygame.time.get_ticks() + 1000
 
 numero = 0 #doit rester a 0
