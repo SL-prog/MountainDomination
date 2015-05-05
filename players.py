@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
         #afficher que l'arme du joueur
         if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
             self.armeaffiche = rotation(self.armeaffiche, self.angle)
-            fenetre.blit(self.armeaffiche, (self.rect.x+10,self.rect.y+10))
+            fenetre.blit(self.armeaffiche, (self.rect.x+10,self.rect.y+6))
 
 #afficher pos perso - TEST
 #        char_x = str(self.rect.x)
@@ -79,15 +79,14 @@ class Player(pygame.sprite.Sprite):
         vitesse_y = 5
         vitesse_saut = 5
 
-        #déterminer si c'est son tour de jeu :
+        #dÃ©terminer si c'est son tour de jeu :
         if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
             #inclinaison arme
             if angle == "+":
-                self.angle += 1
+                self.angle += 5
 
             if angle == "-":
-                self.angle -= 1
-            print(self.angle)
+                self.angle -= 5
 
             #afficher arme
             if switch != self.switch:

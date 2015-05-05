@@ -57,6 +57,7 @@ def mapMAJ(nombre_perso, rouge, bleu, ximpact, yimpact, arme):
     draw.ellipse((ximpact-rayon, yimpact-rayon, ximpact+rayon, yimpact+rayon), fill=(0, 0, 0, 0))
     mapmaj.save("image/mapcopie.png", 'PNG')
 
+    #mettre à jour la map
     decor = pygame.sprite.Sprite()
     decor.image = pygame.image.load("image/mapcopie.png").convert_alpha()
     decor.rect = decor.image.get_rect()

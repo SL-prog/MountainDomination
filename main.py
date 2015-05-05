@@ -27,7 +27,9 @@ while menu>0 and menu<4:
         menu = menuprincipal()
     if menu==2:
         menu, fondchoix, mapchoix = menumap()
-    if menu == 3:
+    if menu==3:
+        menu, fondchoix, mapchoix = menuediteur()
+    if menu == 4:
         menu, skin1, skin2, nombre_perso, viemax, duree_tour = menureglage()
 #-------------------
 
@@ -38,7 +40,7 @@ chargement = 0
 
 #variable fin de la boucle principale
 jeu = False
-if menu == 4:
+if menu == 5:
     #Ouverture de la fenetre Pygame
     pygame.display.set_caption(titre_fenetre)
     #initialisation de la map

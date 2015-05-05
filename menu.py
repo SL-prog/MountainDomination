@@ -10,6 +10,8 @@ import pygame
 from pygame.locals import *
 from constantes import *
 
+from PIL import Image, ImageDraw
+
 def menuprincipal():
     # Initialisation de la fenetre d'affichage
     pygame.display.set_caption("Mountain Domination - Menu")
@@ -83,6 +85,7 @@ def menumap():
     couleur_rect6 = 0
     couleur_retour = (30,127,203)
     couleur_suivant = (167,103,38)
+    couleur_editeur = (150,0,38)
     select = 0
     fondchoix = "image/backgrounds/backmap-dune.png"
     mapchoix = "image/maps/map-dune.png"
@@ -111,9 +114,16 @@ def menumap():
         pygame.draw.rect(fenetre,couleur_suivant, (598,482,180,55), 0) # avec : x,y, longueur, Epaisseur
         pygame.draw.rect(fenetre,(255,255,255), (598,482,180,55), 2)
         text = font.render("SUIVANT", 1, (255, 255, 255))
-
     # Et voici le texte :
         fenetre.blit(text, (622,492))
+
+    # 3) Voici le bouton editeur, et son cadre:
+        pygame.draw.rect(fenetre,couleur_editeur, (310,482,180,55), 0) # avec : x,y, longueur, Epaisseur
+        pygame.draw.rect(fenetre,(255,255,255), (310,482,180,55), 2)
+        text = font.render("EDITEUR", 1, (255, 255, 255))
+
+    # Et voici le texte :
+        fenetre.blit(text, (334,492))
 
 #---------------------------
 
@@ -132,9 +142,13 @@ def menumap():
                 elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 482)  and (event.pos[1] <= 537) :
                     couleur_suivant = (127,35,128)
 
+                elif (event.pos[0] >= 310)  and (event.pos[0]<= 490) and (event.pos[1] >= 482)  and (event.pos[1] <= 537) :
+                    couleur_editeur = (127,35,128)
+
                 else:
                     couleur_retour = (30,127,203)
                     couleur_suivant = (167,103,38)
+                    couleur_editeur = (150,0,38)
 
             if event.type == MOUSEBUTTONDOWN and event.button == 1 :
                 couleur_rect1 = 0
@@ -183,10 +197,13 @@ def menumap():
 #----------------
                 #bouton retour
                 elif (event.pos[0] >= 20)  and (event.pos[0]<= 200) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
-                    return 1, 0, 0
+                    return 1, 0, 0 #menu principal
                 #bouton suivant
                 elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
-                    return 3, fondchoix, mapchoix #jouer
+                    return 4, fondchoix, mapchoix #menu reglage
+                #bouton editeur
+                elif (event.pos[0] >= 310)  and (event.pos[0]<= 490) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
+                    return 3, fondchoix, mapchoix #menu editeur
 #----------------
 
 
@@ -215,7 +232,7 @@ def menureglage():
     couleur_retour = (30,127,203)
     couleur_suivant = (167,103,38)
     # Initialisation de la fenetre d'affichage
-    pygame.display.set_caption("Mountain Domination - RÃ©glages")
+    pygame.display.set_caption("Mountain Domination - RÃƒÂ©glages")
 
     # Remplissage de l'arriere-plan
     fond = pygame.image.load("image/backgrounds/backgroundmenureglages.png").convert()
@@ -304,7 +321,7 @@ def menureglage():
                     return 2, 0, 0, 0, 0, 0
                 #bouton suivant
                 elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 482)  and (event.pos[1] <= 537):
-                    return 4, skin1, skin2, sliderequipe.valeur, slidervie.valeur, sliderduree.valeur #jouer
+                    return 5, skin1, skin2, sliderequipe.valeur, slidervie.valeur, sliderduree.valeur #jouer
 
                 sliderequipe.clic(event)
                 slidervie.clic(event)
@@ -315,6 +332,194 @@ def menureglage():
         sliderduree.affiche(fenetre)
 
         pygame.display.flip()
+
+
+#---------------------------------------------------------------------------------------
+#Nouvelle fonction
+#---------------------------------------------------------------------------------------
+
+def menuediteur():
+    #initialisation variables
+    couleur_retour = (30,127,203)
+    couleur_generer = (167,103,38)
+    # Initialisation de la fenetre d'affichage
+    pygame.display.set_caption("Mountain Domination - Map Editeur")
+
+    # Remplissage de l'arriere-plan
+    fond = pygame.image.load("image/backgrounds/backgroundmenuediteur.png").convert()
+
+   #Police des boutons textes
+    font = pygame.font.Font("police.ttf", 26)
+
+    bouton1 = 1
+    bouton2 = 1
+
+    skin1 = "image/maps/skinmap1.png"
+    skin2 = "image/backgrounds/skinfond1.png"
+
+    affiche1 = pygame.image.load("image/boutonsmenu/btmap1.png").convert_alpha()
+    affiche2 = pygame.image.load("image/boutonsmenu/btfond1.png").convert_alpha()
+    affiche3 = pygame.image.load("image/boutonsmenu/btdelet1.png").convert_alpha()
+
+
+
+    mapeditaffiche = pygame.image.load("image/maps/mapedit.png").convert_alpha()
+    curseur = "rectangle"
+    largeurcurseur,longueurcurseur = 50,50
+    pygame.mouse.set_visible(0)
+
+    mapedit = Image.open("image/maps/mapedit.png")
+
+    draw = ImageDraw.Draw(mapedit)
+
+    # Boucle infinie
+    while 1:
+
+        # Blitter le tout dans la fenetre
+        fenetre.blit(fond, (0, 0))
+
+        fenetre.blit(mapeditaffiche, (0,0))
+
+    #Boutons retour (1) et suivant (2)
+
+     # 1) Voici le bouton retour, et son cadre :
+        pygame.draw.rect(fenetre,couleur_retour, (20,493,180,55), 0) # avec : x,y, longueur, Epaisseur
+        pygame.draw.rect(fenetre,(255,255,255), (20,493,180,55), 2)
+        text = font.render("RETOUR", 1, (255, 255, 255))
+    # Et voici le texte :
+        fenetre.blit(text, (48,503))
+
+    # 2) Voici le bouton generer, et son cadre:
+        pygame.draw.rect(fenetre,couleur_generer, (598,493,180,55), 0) # avec : x,y, longueur, Epaisseur
+        pygame.draw.rect(fenetre,(255,255,255), (598,493,180,55), 2)
+        text = font.render("GENERER", 1, (255, 255, 255))
+
+    # Et voici le texte :
+        fenetre.blit(text, (622,503))
+
+        fenetre.blit(affiche1, (320, 483))
+        fenetre.blit(affiche2, (404, 483))
+
+        fenetre.blit(affiche3, (490, 502))
+
+#---------------------------
+        (xsouris, ysouris) = pygame.mouse.get_pos() #recuperer les coordonnees curseur
+            #dessiner le curseur
+        if curseur == "rectangle":
+            pygame.draw.rect(fenetre,(255,0,0), (xsouris-(largeurcurseur/2),ysouris-(longueurcurseur/2),largeurcurseur,longueurcurseur), 0)
+        if curseur == "ellipse":
+            pygame.draw.ellipse(fenetre, (255,0,0), (xsouris-(largeurcurseur/2),ysouris-(longueurcurseur/2),largeurcurseur,longueurcurseur), 0)
+
+
+        for event in pygame.event.get():
+
+            if event.type == QUIT:
+                return 0, 0, 0
+
+            if event.type == MOUSEMOTION:
+
+                if (event.pos[0] >= 20)  and (event.pos[0]<= 200) and (event.pos[1] >= 493)  and (event.pos[1] <= 548) :
+                    couleur_retour = (127,35,128)
+
+                elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 493)  and (event.pos[1] <= 548):
+                    couleur_generer = (127,35,128)
+
+                elif (event.pos[0] >= 490)  and (event.pos[0]<= 530) and (event.pos[1] >= 502)  and (event.pos[1] <= 542):
+                    affiche3 = pygame.image.load("image/boutonsmenu/btdelet2.png").convert_alpha()
+
+                else:
+                    couleur_retour = (30,127,203)
+                    couleur_generer = (167,103,38)
+                    affiche3 = pygame.image.load("image/boutonsmenu/btdelet1.png").convert_alpha()
+
+
+            if event.type == MOUSEBUTTONDOWN and event.button == 1 :
+                if (event.pos[0] >= 320)  and (event.pos[0]<= 396) and (event.pos[1] >= 483)  and (event.pos[1] <= 559):
+                    bouton1 += 1
+                    if bouton1 > 4 :
+                        bouton1 = 1
+                    affiche1 = pygame.image.load("image/boutonsmenu/btmap"+str(bouton1)+".png").convert_alpha()
+                    skin1 = "image/maps/skinmap"+str(bouton1)+".png"
+
+
+                if (event.pos[0] >= 404)  and (event.pos[0]<= 480) and (event.pos[1] >= 483)  and (event.pos[1] <= 559):
+                    bouton2 += 1
+                    if bouton2 > 4 :
+                        bouton2 = 1
+                    affiche2 = pygame.image.load("image/boutonsmenu/btfond"+str(bouton2)+".png").convert_alpha()
+                    skin2 = "image/backgrounds/skinfond"+str(bouton2)+".png"
+#----------------
+                #bouton retour
+                if (event.pos[0] >= 20)  and (event.pos[0]<= 200) and (event.pos[1] >= 493)  and (event.pos[1] <= 548):
+                    pygame.mouse.set_visible(1)
+                    return 2, 0, 0
+                #bouton generer
+                elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 493)  and (event.pos[1] <= 548):
+                    pygame.mouse.set_visible(1)
+                    mapchoix = generer(skin1, fenetre)
+                    return 4, skin2, mapchoix
+                elif (event.pos[0] >= 490)  and (event.pos[0]<= 530) and (event.pos[1] >= 502)  and (event.pos[1] <= 542):
+                    draw.rectangle((0,0,800,480), fill=(255,255,255,0))
+                    mapedit.save("image/maps/mapedit.png", 'PNG')
+                    mapeditaffiche = pygame.image.load("image/maps/mapedit.png").convert_alpha()
+
+                #afficher modifier map selon curseur
+                if (event.pos[0] >= 0)  and (event.pos[0]<= 800) and (event.pos[1] >= 0)  and (event.pos[1] <= 480):
+                    if curseur == "rectangle":
+                        draw.rectangle((xsouris-(largeurcurseur/2),ysouris-(longueurcurseur/2),xsouris+(largeurcurseur/2),ysouris+(longueurcurseur/2)), fill=(255,255,255))
+                    elif curseur == "ellipse":
+                        draw.ellipse((xsouris-(largeurcurseur/2), ysouris-(longueurcurseur/2), xsouris+(largeurcurseur/2), ysouris+(longueurcurseur/2)), fill=(255,255,255))
+                    mapedit.save("image/maps/mapedit.png", 'PNG')
+                    mapeditaffiche = pygame.image.load("image/maps/mapedit.png").convert_alpha()
+
+            if event.type == MOUSEBUTTONDOWN and event.button == 3 :
+                #afficher modifier map selon curseur
+                if (event.pos[0] >= 0)  and (event.pos[0]<= 800) and (event.pos[1] >= 0)  and (event.pos[1] <= 480):
+                    if curseur == "rectangle":
+                        draw.rectangle((xsouris-(largeurcurseur/2),ysouris-(longueurcurseur/2),xsouris+(largeurcurseur/2),ysouris+(longueurcurseur/2)), fill=(255, 255, 255, 0))
+                    elif curseur == "ellipse":
+                        draw.ellipse((xsouris-(largeurcurseur/2), ysouris-(longueurcurseur/2), xsouris+(largeurcurseur/2), ysouris+(longueurcurseur/2)), fill=(255, 255, 255, 0))
+                    mapedit.save("image/maps/mapedit.png", 'PNG')
+                    mapeditaffiche = pygame.image.load("image/maps/mapedit.png").convert_alpha()
+
+            #changer taille curseur
+            if event.type == pygame.KEYDOWN:
+                if (event.key == pygame.K_SPACE) and (curseur == "rectangle"):
+                    curseur = "ellipse"
+                elif (event.key == pygame.K_SPACE) and (curseur == "ellipse"):
+                    curseur = "rectangle"
+                if (event.key == pygame.K_UP) and (longueurcurseur<100):
+                    longueurcurseur+=2
+                if (event.key == pygame.K_DOWN) and (longueurcurseur>=6):
+                    longueurcurseur-=2
+                if (event.key == pygame.K_RIGHT) and (largeurcurseur<100):
+                    largeurcurseur+=2
+                if (event.key == pygame.K_LEFT) and (largeurcurseur>=6):
+                    largeurcurseur-=2
+#----------------
+
+        pygame.display.flip()
+#---------------------------------------------------------------------------------------
+#Nouvelle fonction
+#---------------------------------------------------------------------------------------
+def generer(skinmap, fenetre):
+    mapedit = Image.open("image/maps/mapedit.png", 'r')
+    skin = Image.open(skinmap,'r')
+    mapgenere = Image.new('RGBA', (800, 480))
+
+    for y in range(480):
+        for x in range(800):
+
+            if mapedit.getpixel((x,y)) != (255, 255, 255, 0):
+                pixel = skin.getpixel((x,y))
+                mapgenere.putpixel((x,y), pixel)
+
+    mapfinale = "image/mapgenere.png"
+
+    mapgenere.save(mapfinale, 'PNG')
+
+
+    return mapfinale
 
 #---------------------------------------------------------------------------------------
 #Class
