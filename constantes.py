@@ -40,6 +40,12 @@ gauche = False
 droite = False
 saut = False
 
+tombe1 =  "image/personnages/tombe1.png"
+tombe2 =  "image/personnages/tombe2.png"
+
+expl1 = pygame.image.load("image/armes/expl1.png").convert_alpha()
+expl2 = pygame.image.load("image/armes/expl2.png").convert_alpha()
+
 angle = ""
 
 seconde = pygame.time.get_ticks() + 1000

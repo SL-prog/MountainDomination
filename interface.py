@@ -20,8 +20,9 @@ def interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2):
     equipe2 = sum(vies2)
     totalvie = equipe1 + equipe2
 
-    pygame.draw.rect(fenetre, (255, 0, 0), (200, 498, ((400*equipe1)/totalvie), 44), 0)
-    pygame.draw.rect(fenetre, (0, 0, 255), ((200+(400*equipe1)/totalvie), 498, ((400*equipe2)/totalvie), 44), 0)
+    if totalvie != 0:
+        pygame.draw.rect(fenetre, (255, 0, 0), (200, 498, ((400*equipe1)/totalvie), 44), 0)
+        pygame.draw.rect(fenetre, (0, 0, 255), ((200+(400*equipe1)/totalvie), 498, ((400*equipe2)/totalvie), 44), 0)
 
 
     pygame.draw.rect(fenetre, (0, 0, 0), (200, 498, 400, 44), 2)

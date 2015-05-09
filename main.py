@@ -88,6 +88,9 @@ while jeu:
             if event.key == pygame.K_g:
                 angle = "-"
 
+            if event.key == pygame.K_p: #passer tour
+                tempsjeu = 0
+
 #Front descendant appuis touche
         elif event.type == pygame.KEYUP:
 #fin deplacement droite-gauche
@@ -100,7 +103,9 @@ while jeu:
                 saut=False
 
             if event.key == pygame.K_SPACE:
-                decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch)
+                rouge[numero].tir(chargement, tour, numero)
+                bleu[numero].tir(chargement, tour, numero)
+                #decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
                 chargement = 0
 #touche D
             if event.key == pygame.K_d:
@@ -111,11 +116,12 @@ while jeu:
             if event.key == pygame.K_g:
                 angle = ""
 
-#Gerer mouvement personnages - ajouter impossibilite controle mort
+#Gerer mouvement personnages - mettre a jour vie
     for rang in range(nombre_perso):
         rouge[rang].mouvement(tour, numero, saut, gauche, droite, debug, angle, switch)
         bleu[rang].mouvement(tour, numero, saut, gauche, droite, debug, angle, switch)
-    print(angle)
+        vies1[rang] = rouge[rang].vie
+        vies2[rang] = bleu[rang].vie
 
 #Afficher le fond du jeu
     fenetre.blit(fond, (0,0))
@@ -124,12 +130,10 @@ while jeu:
     fenetre.blit(decor.image, decor.rect)
 
 
-#Afficher les personnages - TEST
+#Afficher les personnage
     for rang in range(nombre_perso):
-        if vies1[rang]>0: #pas afficher mort
-            rouge[rang].affiche(fenetre, vies1[rang], tour, numero)
-        if vies2[rang]>0:
-            bleu[rang].affiche(fenetre, vies2[rang], tour, numero)
+        rouge[rang].affiche(fenetre, tour, numero)
+        bleu[rang].affiche(fenetre, tour, numero)
 
 #Afficher sens - TEST
 #    if sens_perso==True:
@@ -145,27 +149,30 @@ while jeu:
 #Afficher l'interface
     interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2)
 
-#----------------------
-
-#TEST BARRE VIE
-    vies2[0]+=1
-    if vies2[0] == 200:
-        vies2[0] = 0
-#----------------------
-
 #timer temps jeu
     if pygame.time.get_ticks() > seconde:
         tempsjeu-=1
         seconde = pygame.time.get_ticks() + 1000
     if tempsjeu == -1:
-        saut, gauche, droite = 0,0,0
+        saut, gauche, droite, angle = 0,0,0,"" #pour eviter de controler le suivant avec les commandes du precedent
         if tour == 2:
             numero+=1
-            if numero == nombre_perso:
-                numero = 0
+        if numero == nombre_perso:
+            numero = 0
+        if tour==1:
+            while rouge[numero].vivant == False:
+                numero+=1
+                if numero == nombre_perso:
+                    numero = 0
+
+        if tour==2:
+            while bleu[numero].vivant == False:
+                numero+=1
+                if numero == nombre_perso:
+                    numero = 0
+
         tour, jeu = passertour(fenetre, tour)
         tempsjeu = duree_tour
-
 
 #Rafraichissement/mise a jour de l'ecran
     pygame.display.flip()

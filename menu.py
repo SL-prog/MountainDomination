@@ -232,7 +232,7 @@ def menureglage():
     couleur_retour = (30,127,203)
     couleur_suivant = (167,103,38)
     # Initialisation de la fenetre d'affichage
-    pygame.display.set_caption("Mountain Domination - RÃƒÂ©glages")
+    pygame.display.set_caption("Mountain Domination - Réglages")
 
     # Remplissage de l'arriere-plan
     fond = pygame.image.load("image/backgrounds/backgroundmenureglages.png").convert()
@@ -456,7 +456,11 @@ def menuediteur():
                 #bouton generer
                 elif (event.pos[0] >= 598)  and (event.pos[0]<= 778) and (event.pos[1] >= 493)  and (event.pos[1] <= 548):
                     pygame.mouse.set_visible(1)
-                    mapchoix = generer(skin1, fenetre)
+                    font = pygame.font.Font(None, 35)
+                    text = font.render("GENERATION EN COURS...", 1, (255, 0, 0))
+                    fenetre.blit(text, (240,260))
+                    pygame.display.flip()
+                    mapchoix = generer(skin1)
                     return 4, skin2, mapchoix
                 elif (event.pos[0] >= 490)  and (event.pos[0]<= 530) and (event.pos[1] >= 502)  and (event.pos[1] <= 542):
                     draw.rectangle((0,0,800,480), fill=(255,255,255,0))
@@ -502,7 +506,7 @@ def menuediteur():
 #---------------------------------------------------------------------------------------
 #Nouvelle fonction
 #---------------------------------------------------------------------------------------
-def generer(skinmap, fenetre):
+def generer(skinmap):
     mapedit = Image.open("image/maps/mapedit.png", 'r')
     skin = Image.open(skinmap,'r')
     mapgenere = Image.new('RGBA', (800, 480))
