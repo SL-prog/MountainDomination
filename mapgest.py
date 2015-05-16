@@ -45,13 +45,16 @@ def mapinit(skin1, skin2, nombre_perso, viemax, fondchoix, mapchoix):
     bleu = [0]*nombre_perso
     #creer les objets personnages
     for rang in range(nombre_perso):
-        rouge[rang] = players.Player(rang, decor, projectile, skin1, randint(100, 700), 50, viemax, "red", tombe1)
-        bleu[rang] = players.Player(rang, decor, projectile, skin2, randint(100, 700), 50, viemax, "blue", tombe2)
+#        rouge[rang] = players.Player(rang, decor, projectile, skin1, randint(100, 700), 50, viemax, "red", tombe1)
+        rouge[rang] = players.Player(rang, decor, projectile, skin1, randint(20, 780), 0, viemax, "red", tombe1)
+        bleu[rang] = players.Player(rang, decor, projectile, skin2, randint(20, 780), 0, viemax, "blue", tombe2)
 
     return fond, decor, rouge, bleu, vies1, vies2
 
 
 def mapMAJ(nombre_perso, rouge, bleu, ximpact, yimpact, arme, fenetre):
+    #jouer son explosion
+    sonexplosion.play()
     if arme == 1:
         rayon = 45
         fenetre.blit(expl1,(ximpact-45,yimpact-45))

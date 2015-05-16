@@ -19,6 +19,11 @@ from interface import *
 #-------------------
 from menu import *
 
+#pouvoir quitter l'appli !!!!!!!!!!!!!!!!!!
+
+#musique menu
+sonmenu.play(-1) #-1 pour infini
+
 #BOUCLE menu
 menu = 1
 #menu2 = False
@@ -40,7 +45,10 @@ chargement = 0
 
 #variable fin de la boucle principale
 jeu = False
+#si menu = 5 lancer le jeu
 if menu == 5:
+    #arret musique menu
+    sonmenu.stop()
     #Ouverture de la fenetre Pygame
     pygame.display.set_caption(titre_fenetre)
     #initialisation de la map
@@ -103,9 +111,9 @@ while jeu:
                 saut=False
 
             if event.key == pygame.K_SPACE:
-                rouge[numero].tir(chargement, tour, numero)
-                bleu[numero].tir(chargement, tour, numero)
-                #decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
+                #rouge[numero].tir(chargement, tour, numero)
+                #bleu[numero].tir(chargement, tour, numero)
+                decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
                 chargement = 0
 #touche D
             if event.key == pygame.K_d:
@@ -130,7 +138,7 @@ while jeu:
     fenetre.blit(decor.image, decor.rect)
 
 
-#Afficher les personnage
+#Afficher les personnages
     for rang in range(nombre_perso):
         rouge[rang].affiche(fenetre, tour, numero)
         bleu[rang].affiche(fenetre, tour, numero)

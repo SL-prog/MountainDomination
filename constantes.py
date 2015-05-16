@@ -13,6 +13,10 @@ from pygame.locals import *
 largeur_ecran = 800
 hauteur_ecran = 560
 
+#son
+sonmenu = pygame.mixer.Sound("sons/menu.wav")
+sonexplosion = pygame.mixer.Sound("sons/explosion.wav")
+
 #Titre ecran
 titre_fenetre = 'Mountain Domination'
 fenetre = pygame.display.set_mode((largeur_ecran, hauteur_ecran)) #fenetre de 640*480
@@ -35,18 +39,17 @@ horloge = pygame.image.load("image/interface/horloge.png").convert_alpha()
 tourjoueur1 = pygame.image.load("image/interface/tourjoueur1.png").convert_alpha()
 tourjoueur2 = pygame.image.load("image/interface/tourjoueur2.png").convert_alpha()
 
-
+#initialiser les touches de commande
 gauche = False
 droite = False
 saut = False
+angle = ""
 
 tombe1 =  "image/personnages/tombe1.png"
 tombe2 =  "image/personnages/tombe2.png"
 
 expl1 = pygame.image.load("image/armes/expl1.png").convert_alpha()
 expl2 = pygame.image.load("image/armes/expl2.png").convert_alpha()
-
-angle = ""
 
 seconde = pygame.time.get_ticks() + 1000
 
