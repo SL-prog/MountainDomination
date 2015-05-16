@@ -32,13 +32,13 @@ class Player(pygame.sprite.Sprite):
 
         self.parterre = False
 
-        #vitesse du personnage (TEST)
+        #vitesse du personnage
         self.vitesse_x = 5
-#        self.vitesse_y = 5
-#        self.vitesse_saut = 5
+        self.vitesse_y = 5
+        self.vitesse_saut = 5
         self.gravite = 0.01
         self.depart_timer, self.fin_timer = False, False
-        self.sauter = 0
+        self.sauter = 0 #duree initiale saut
 
         self.angle = 0
         self.imgbaz = pygame.image.load("image/armes/arme1.png").convert_alpha()
@@ -83,7 +83,7 @@ class Player(pygame.sprite.Sprite):
             fenetre.blit(self.projectile.image, (20,20))
 
 #afficher pos perso - TEST --------------------------
-        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero) and 0:
+        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
             char_x = str(self.rect.x)
             char_y = str(self.rect.y)
             font = pygame.font.Font(None, 50)
@@ -99,10 +99,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.x = self.x
             self.rect.y = self.y
 #-----------------------
-
-        vitesse_y = 5
-        vitesse_saut = 5
-
         if self.rang == 1 and self.couleurperso == "red":
             self.vie = self.vie -1
         #determiner si c'est son tour de jeu :
@@ -153,78 +149,66 @@ class Player(pygame.sprite.Sprite):
             if saut and self.parterre:
                 self.depart_timer = True
                 self.fin_timer = False
-                self.rect.y -= vitesse_saut
-        else:
+                self.rect.y -= self.vitesse_saut #début saut
+
+        else: #si ce n'est pas son tour
             saut = 0
             droite = 0
             gauche = 0
 
-        if not saut:
+        if not(saut):
             self.fin_timer = True
 
         if self.depart_timer == True:
-            self.sauter = pygame.time.get_ticks() + 400
+            self.sauter = pygame.time.get_ticks() + 400 #duree saut 400ms
             self.depart_timer = False
         if pygame.time.get_ticks() > self.sauter:
             self.fin_timer = True
 
-        if not self.parterre:
+        if not(self.parterre):
             if self.fin_timer:
-                vitesse_y += self.gravite  #appliquer la gravite
-			 #attraction maximale
-                if vitesse_y > 30:
-                    vitesse_y = 30
-                self.rect.y += vitesse_y
-            if not self.fin_timer:
-                self.rect.y -= vitesse_saut #sauter
+                self.vitesse_y += self.gravite  #appliquer la gravite
+			     #limiter attraction maximale
+                if self.vitesse_y > 10:
+                    self.vitesse_y = 10
+                self.rect.y += self.vitesse_y
+            if not(self.fin_timer):
+                self.rect.y -= self.vitesse_saut #sauter
+
+        #reinitialiser vitesse y
+        if self.parterre:
+            self.vitesse_y = 5
 
 		# faire la collision avec les x
-        self.collision(self.vitesse_x, 0, gauche, droite, False)
+        self.collision(gauche, droite, False)
         if saut == False:
-            self.rect.y += vitesse_y
+            self.rect.y += self.vitesse_y
 		#en l'air
         self.parterre = False
 		# faire la collision avec les y
-        self.collision(0, vitesse_y, False, False, saut)
+        self.collision(False, False, saut)
 
+        #si plus de points de vie, devenir une tombe, et etre mort
         if self.vie <= 0:
             self.mask = pygame.mask.from_surface(self.tombe)
             self.vie = 0
             self.vivant = False
 
+    def collision(self, gauche, droite, saut):
+        if (pygame.sprite.collide_mask(self, self.decor)):
+            if gauche == True: self.rect.x += self.vitesse_x
+            if droite == True: self.rect.x -= self.vitesse_x
 
-    def collision(self, vitesse_x, vitesse_y, gauche, droite, saut):
-        while (pygame.sprite.collide_mask(self, self.decor)):
-            #empeche le perso d'etre blitte dans la map
-            if gauche == True: self.rect.x += vitesse_x
-            if droite == True: self.rect.x -= vitesse_x
-            if saut == False:
+            if saut == False and self.fin_timer == True:
                 #pour que le perso reste sur le sol
                 while (pygame.sprite.collide_mask(self, self.decor)):
                     self.rect.y -= 1
                 self.parterre = True
-                vitesse_y = 0
-
-# ----------------------BUG----------------------------- #
-            if saut == True:
-#                while (pygame.sprite.collide_mask(self, self.decor)):
-                self.rect.y += self.vitesse_saut
-                self.parterre = False
-                vitesse_y = 0
-
- #           if saut == True:
- #               #pour que le perso reste sur le sol
- #               self.rect.y += self.vitesse_y
- #               self.parterre = True
- #               self.vitesse_y = 0
-
-        #    and (pygame.sprite.collide_mask(self, self.decor)):
-#                    self.rect.y += vitesse_y
-#                vitesse_y = 0
-         #       self.rect.y += vitesse_y
-         #       self.vitesse_y = 0
-         #       self.fin_timer = True
-#---------------------------------------------------------#
+            if saut == True and not(self.parterre):
+                #pour que le perso reste sur le sol
+                while (pygame.sprite.collide_mask(self, self.decor)):
+                    self.rect.y += 1
+                self.fin_timer = True
 
 
     def tir(self, chargement, tour, numero):

@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        Menu
 #
-# Author:      Bretton's power
+# Author:      Bretton's power et regisseur
 #
 # Licence:     <GNU GENERAL PUBLIC LICENSE>
 #-------------------------------------------------------------------------------
@@ -413,8 +413,8 @@ def generer(skinmap):
 #Nouvelle Class
 #---------------------------------------------------------------------------------------
 
-class Bouton: #on defini la class bouton
-    def __init__(self, x, y, texte, couleur): #on recupere ses coordonnees, son texte, et sa couleur
+class Bouton: #on definit la class bouton
+    def __init__(self, x, y, texte, couleur): #on recupere des coordonnees, du texte, et une couleur
         #on initialise les variables du bouton :
         self.font = font = pygame.font.Font("police.ttf", 26) #police du bouton
         self.x = x
@@ -445,7 +445,7 @@ class Bouton: #on defini la class bouton
             if (event.pos[0] >= self.x)  and (event.pos[0]<= self.x+180) and (event.pos[1] >= self.y)  and (event.pos[1] <= self.y+55):
                 self.etat = True #le bouton change d'etat et devient appuye
 
-    def affiche(self, fenetre): #
+    def affiche(self, fenetre):
         #cadre des boutons:
         pygame.draw.rect(fenetre,self.couleuraffiche, (self.x, self.y, 180,55), 0) # avec : x,y, longueur, Epaisseur
         pygame.draw.rect(fenetre,(255,255,255), (self.x, self.y, 180,55), 2)

@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        Interface utilisateur
 #
-# Author:      regisseur
+# Author:      regisseur et sl-prog
 #
 # Licence:     <GNU GENERAL PUBLIC LICENSE>
 #-------------------------------------------------------------------------------
@@ -78,6 +78,7 @@ def interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2):
 def passertour(fenetre, tour):
     attendre = True
     jeu = True
+    mountaindomination = True
     if tour==1:
         tour=2
         fenetre.blit(tourjoueur2, (0,130))
@@ -89,11 +90,12 @@ def passertour(fenetre, tour):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 jeu = False
+                mountaindomination = False
                 attendre = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     attendre = False
-    return tour, jeu
+    return tour, jeu, mountaindomination
 
 
 
