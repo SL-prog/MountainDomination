@@ -8,6 +8,7 @@
 
 import pygame
 from pygame.locals import *
+from math import pi, sin, cos
 
 class Player(pygame.sprite.Sprite):
 
@@ -58,6 +59,10 @@ class Player(pygame.sprite.Sprite):
         self.projectile = projectile
         self.prjx = 0
         self.prjy = 0
+        self.angletir = 0
+        self.vitprjx = 0
+        self.vitprjy = 0
+        self.tempstir = 0
 
     def affiche(self, fenetre):
         if self.vivant:
@@ -205,7 +210,9 @@ class Player(pygame.sprite.Sprite):
             self.vie = 0
             self.vivant = False
 
-        #print(self.angle)
+        if self.afficherprj:
+            self.animerprj()
+
 
     def collision(self, gauche, droite, saut):
         if (pygame.sprite.collide_mask(self, self.decor)):
@@ -222,11 +229,44 @@ class Player(pygame.sprite.Sprite):
                 while (pygame.sprite.collide_mask(self, self.decor)):
                     self.rect.y += 1
                 self.fin_timer = True
+            if self.jouer:
+                print(self.prjx, self.prjy)
 
 
     def tir(self, chargement):
-        if self.jouer:
+        if self.jouer and not(self.afficherprj):
             self.afficherprj = True
+            self.prjy = self.y+6 #position initiale du projectile en y
+            if self.cote == "gauche":
+                self.prjx = self.x+14 #position initiale du projectile en x
+                #conversion de l'angle
+                if self.angle < 0 :
+                    self.angletir = -self.angle
+                if self.angle == 0 :
+                    self.angletir = 180
+                if self.angle > 0 :
+                    self.angletir = 180+self.angle
+            if self.cote == "droite":
+                self.prjx = self.x+10
+                if self.angle < 0:
+                    self.angletir = 360 + self.angle
+                else:
+                    self.angletir = self.angle
+            vproj = chargement
+            self.vitprjx = -vproj*cos(self.angletir)
+            self.vitprjy = -vproj*sin(self.angletir)
+            self.tempstir = pygame.time.get_ticks()
+
+    def animerprj(self):
+        if (pygame.sprite.collide_mask(self.projectile, self.decor)): #si le projectile touche le decor
+            self.afficherprj = False
+
+
+        if self.afficherprj == True:
+            temps = int((pygame.time.get_ticks()-self.tempstir)/1000)
+            self.prjx = int(self.vitprjx*temps)+self.prjx
+            self.prjy = int(((-0.5)*self.gravite*10*temps*temps)+(self.vitprjy*temps))+self.prjy
+
 
 
 def rotation(image, angle): #rotation arme, par le milieu de l'image

@@ -118,9 +118,9 @@ while mountaindomination: #boucle principale de Mountain Domination
                   saut=False
 
               if event.key == pygame.K_SPACE:
-                  #rouge[numerorouge].tir(chargement)
-                  #bleu[numerobleu].tir(chargement)
-                  decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
+                  rouge[numerorouge].tir(chargement)
+                  bleu[numerobleu].tir(chargement)
+                  #decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
                   chargement = 0
   #touche D
               if event.key == pygame.K_d:
