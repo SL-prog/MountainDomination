@@ -54,12 +54,7 @@ tombe2 =  "image/personnages/tombe2.png"
 expl1 = pygame.image.load("image/armes/expl1.png").convert_alpha()
 expl2 = pygame.image.load("image/armes/expl2.png").convert_alpha()
 
-tempsattente = 1000
-seconde = pygame.time.get_ticks() + tempsattente
+seconde = pygame.time.get_ticks() + 1000
 
 numerorouge = 0 #doit rester a 0
 numerobleu = 0
-
-#TEST
-sens_perso = True
-debug = False

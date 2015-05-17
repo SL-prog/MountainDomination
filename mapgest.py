@@ -76,8 +76,18 @@ def mapMAJ(nombre_perso, rouge, bleu, ximpact, yimpact, arme, fenetre):
     decor.rect.topleft = 0,0
     decor.mask = pygame.mask.from_surface(decor.image)
 
-    #for rang in range (nombre_perso):
-#retirer vie au perso
+    explosion = pygame.Rect(ximpact-rayon, yimpact-rayon, 2*rayon, 2*rayon)
+    for rang in range(nombre_perso):
+        if explosion.collidepoint(rouge[rang].rect.x,rouge[rang].rect.y):
+            if rouge[rang].vivant:
+                rouge[rang].vie -= rayon #retirer vie au perso
+                if rouge[rang].vie <= 0:
+                    rouge[rang].vie = 0
+        if explosion.collidepoint(bleu[rang].rect.x,bleu[rang].rect.y):
+            if bleu[rang].vivant:
+                bleu[rang].vie -= rayon #retirer vie au perso
+                if bleu[rang].vie <= 0:
+                    bleu[rang].vie = 0
 
     for rang in range(nombre_perso):
         rouge[rang].decor = decor

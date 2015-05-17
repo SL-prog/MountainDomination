@@ -100,6 +100,7 @@ def passertour(fenetre, tour):
 def gagner(vies1, vies2):
     fenetre.blit(congratulations, (0,0))
     font = pygame.font.Font(None, 50)
+    pygame.time.wait(500)
     if sum(vies1) == 0:
         texte = "Joueur 2"
         couleur = (0,0,255)

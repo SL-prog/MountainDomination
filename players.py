@@ -63,8 +63,14 @@ class Player(pygame.sprite.Sprite):
         self.vitprjx = 0
         self.vitprjy = 0
         self.tempstir = 0
+        self.boom = False
+        self.prjsortit = False
 
     def affiche(self, fenetre):
+
+        if self.afficherprj == True:
+            fenetre.blit(self.projectile.image, (self.prjx,self.prjy))
+
         if self.vivant:
             fenetre.blit(self.image, self.rect)
             #afficher vie perso
@@ -77,7 +83,7 @@ class Player(pygame.sprite.Sprite):
             vie = self.font.render(vie, 1, couleur)
             fenetre.blit(vie, (self.rect.x,self.rect.y-13))
             #afficher uniquement l'arme du joueur actuel
-            if self.jouer:
+            if self.jouer and not(self.afficherprj):
                 self.armeaffiche = rotation(self.armeaffiche, self.angle)
                 if self.cote =="droite":
                     fenetre.blit(self.armeaffiche, (self.rect.x+14,self.rect.y+6))
@@ -88,26 +94,7 @@ class Player(pygame.sprite.Sprite):
             if (self.rect.x>=0) and (self.rect.x<=800) and (self.rect.y>=0) and (self.rect.y<=480):
                 fenetre.blit(self.tombe, self.rect)
 
-        if self.afficherprj == True:
-            fenetre.blit(self.projectile.image, (self.prjx,self.prjy))
-
-#afficher pos perso - TEST --------------------------
-        if self.jouer:
-            char_x = str(self.rect.x)
-            char_y = str(self.rect.y)
-            font = pygame.font.Font(None, 50)
-            xx = font.render(char_x, 1, (0,0,0))
-            fenetre.blit(xx, (10,10))
-            yy = font.render(char_y, 1, (0,0,0))
-            fenetre.blit(yy, (10,50))
-#--------------------------
-
-    def mouvement(self, tour, numero, saut, gauche, droite, debug, angle, switch):
-# test debug------------
-        if debug == True:
-            self.rect.x = self.x
-            self.rect.y = self.y
-#-----------------------
+    def mouvement(self, tour, numero, saut, gauche, droite, angle, switch):
         #determiner si c'est son tour de jeu :
         if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
             self.jouer = True
@@ -229,38 +216,46 @@ class Player(pygame.sprite.Sprite):
                 while (pygame.sprite.collide_mask(self, self.decor)):
                     self.rect.y += 1
                 self.fin_timer = True
-            if self.jouer:
-                print(self.prjx, self.prjy)
-
 
     def tir(self, chargement):
         if self.jouer and not(self.afficherprj):
             self.afficherprj = True
-            self.prjy = self.y+6 #position initiale du projectile en y
-            if self.cote == "gauche":
-                self.prjx = self.x+14 #position initiale du projectile en x
+
+            (self.prjx, self.prjy) = (self.rect.x+6, self.rect.y+6)
+            if self.cote == "droite":
                 #conversion de l'angle
                 if self.angle < 0 :
-                    self.angletir = -self.angle
+                    self.angletir = self.angle
                 if self.angle == 0 :
                     self.angletir = 180
                 if self.angle > 0 :
                     self.angletir = 180+self.angle
-            if self.cote == "droite":
-                self.prjx = self.x+10
+            if self.cote == "gauche":
                 if self.angle < 0:
-                    self.angletir = 360 + self.angle
+                    self.angletir = 360 - self.angle
                 else:
                     self.angletir = self.angle
+            self.angletir = int(self.angletir*(pi/180)) #convertir l'angle en radian
             vproj = chargement
             self.vitprjx = -vproj*cos(self.angletir)
             self.vitprjy = -vproj*sin(self.angletir)
             self.tempstir = pygame.time.get_ticks()
 
     def animerprj(self):
+        if not(self.afficherprj):
+            self.prjx = 0
+            self.prjy = 0
+            self.vitprjx = 0
+            self.vitprjy = 0
+            self.tempstir = 0
+
+        self.projectile.rect.topleft = (self.prjx,self.prjy)
         if (pygame.sprite.collide_mask(self.projectile, self.decor)): #si le projectile touche le decor
             self.afficherprj = False
-
+            self.boom = True
+        if self.prjx<0 or self.prjx>800 or self.prjy<0 or self.prjy>480:
+            self.afficherprj = False
+            self.prjsortit = True
 
         if self.afficherprj == True:
             temps = int((pygame.time.get_ticks()-self.tempstir)/1000)

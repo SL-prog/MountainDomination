@@ -38,8 +38,6 @@ while mountaindomination: #boucle principale de Mountain Domination
           menu, skin1, skin2, nombre_perso, viemax, duree_tour = menureglage()
   #-------------------
 
-
-  #TEST
   switch = 1
   chargement = 0
 
@@ -77,10 +75,8 @@ while mountaindomination: #boucle principale de Mountain Domination
                 jeu = False
   #deplacement droite-gauche
               if event.key == pygame.K_LEFT:
-                  sens_perso = False #TEST
                   gauche = True
               elif event.key == pygame.K_RIGHT:
-                  sens_perso = True #TEST
                   droite = True
   #saut
               if event.key == pygame.K_UP:
@@ -91,12 +87,9 @@ while mountaindomination: #boucle principale de Mountain Domination
               elif (event.key == pygame.K_s) and switch==1:
                   switch=2
 
-              if event.key == pygame.K_SPACE:
+              if event.key == pygame.K_SPACE and not(rouge[numerorouge].afficherprj) and not(bleu[numerobleu].afficherprj):
                   if chargement < 35:
                       chargement+=1
-  #Test touche D
-              if event.key == pygame.K_d:
-                  debug=True
 
               if event.key == pygame.K_f:
                   angle = "+"
@@ -120,58 +113,52 @@ while mountaindomination: #boucle principale de Mountain Domination
               if event.key == pygame.K_SPACE:
                   rouge[numerorouge].tir(chargement)
                   bleu[numerobleu].tir(chargement)
-                  #decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
                   chargement = 0
-  #touche D
-              if event.key == pygame.K_d:
-                  debug=False
 
               if event.key == pygame.K_f:
                   angle = ""
               if event.key == pygame.K_g:
                   angle = ""
 
+    #si un projectile touche le decor:
+      if rouge[numerorouge].boom == True:
+        decor = mapMAJ(nombre_perso, rouge, bleu, rouge[numerorouge].prjx, rouge[numerorouge].prjy, rouge[numerorouge].switch, fenetre)
+        rouge[numerorouge].boom = False
+
+      if bleu[numerobleu].boom == True:
+        decor = mapMAJ(nombre_perso, rouge, bleu, bleu[numerorouge].prjx, bleu[numerorouge].prjy, bleu[numerorouge].switch, fenetre)
+        bleu[numerobleu].boom = False
+
+
   #Gerer mouvement personnages - mettre a jour vie
       for rang in range(nombre_perso):
-          rouge[rang].mouvement(tour, numerorouge, saut, gauche, droite, debug, angle, switch)
-          bleu[rang].mouvement(tour, numerobleu, saut, gauche, droite, debug, angle, switch)
+          rouge[rang].mouvement(tour, numerorouge, saut, gauche, droite, angle, switch)
+          bleu[rang].mouvement(tour, numerobleu, saut, gauche, droite, angle, switch)
           vies1[rang] = rouge[rang].vie
           vies2[rang] = bleu[rang].vie
 
-  #Afficher le fond du jeu
+      #Afficher le fond du jeu
       fenetre.blit(fond, (0,0))
 
-  #Afficher la montagne -- Creer class
+      #Afficher la montagne
       fenetre.blit(decor.image, decor.rect)
 
-
-  #Afficher les personnages
+      #Afficher les personnages
       for rang in range(nombre_perso):
           rouge[rang].affiche(fenetre)
           bleu[rang].affiche(fenetre)
-
-  #Afficher sens - TEST
-  #    if sens_perso==True:
-  #        charsens = 'droite'
-  #        couleursens=(0,255,0)
-  #    else:
-  #        charsens = 'gauche'
-  #        couleursens = (255,0,0)
-  #    font = pygame.font.Font(None, 50)
-  #    textsens = font.render(charsens, 1, couleursens)
-  #    fenetre.blit(textsens, (370,10))
 
       #Afficher l'interface
       interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2)
 
       #faire passer tour aux morts
-      if (rouge[numerorouge].jouer and not(rouge[numerorouge].vivant)) or (bleu[numerobleu].jouer and not(bleu[numerobleu].vivant)):
+      if (rouge[numerorouge].jouer and (not(rouge[numerorouge].vivant)) or (bleu[numerobleu].jouer and not(bleu[numerobleu].vivant))):
         tempsjeu = 0
 
   #timer temps jeu
       if pygame.time.get_ticks() > seconde:
           tempsjeu-=1
-          seconde = pygame.time.get_ticks() + tempsattente
+          seconde = pygame.time.get_ticks() + 1000
       if tempsjeu == -1:
           saut, gauche, droite, angle = 0,0,0,"" #pour eviter de controler le suivant avec les commandes du precedent
           if tour == 2: #gerer tour de jeu
