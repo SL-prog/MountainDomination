@@ -20,6 +20,8 @@ class Player(pygame.sprite.Sprite):
         self.vie = vie
         self.vivant = True
 
+        self.jouer = False
+
         self.decor = decor
         self.couleurperso = couleurperso
         self.tombe = pygame.image.load(tombe).convert_alpha()
@@ -68,7 +70,7 @@ class Player(pygame.sprite.Sprite):
             vie = self.font.render(vie, 1, couleur)
             fenetre.blit(vie, (self.rect.x,self.rect.y-13))
             #afficher uniquement l'arme du joueur actuel
-            if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
+            if self.jouer:
                 self.armeaffiche = rotation(self.armeaffiche, self.angle)
                 if self.cote =="droite":
                     fenetre.blit(self.armeaffiche, (self.rect.x+14,self.rect.y+6))
@@ -83,7 +85,7 @@ class Player(pygame.sprite.Sprite):
             fenetre.blit(self.projectile.image, (20,20))
 
 #afficher pos perso - TEST --------------------------
-        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
+        if self.jouer:
             char_x = str(self.rect.x)
             char_y = str(self.rect.y)
             font = pygame.font.Font(None, 50)
@@ -99,10 +101,13 @@ class Player(pygame.sprite.Sprite):
             self.rect.x = self.x
             self.rect.y = self.y
 #-----------------------
-        if self.rang == 1 and self.couleurperso == "red":
-            self.vie = self.vie -1
         #determiner si c'est son tour de jeu :
-        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero) and self.afficherprj == False:
+        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
+            self.jouer = True
+        else:
+            self.jouer = False
+
+        if self.jouer and not(self.afficherprj):
             #inclinaison arme
             if angle == "+":
                 if self.cote == "droite" and self.angle<90:
@@ -149,7 +154,7 @@ class Player(pygame.sprite.Sprite):
             if saut and self.parterre:
                 self.depart_timer = True
                 self.fin_timer = False
-                self.rect.y -= self.vitesse_saut #début saut
+                self.rect.y -= self.vitesse_saut #dÃ©but saut
 
         else: #si ce n'est pas son tour
             saut = 0
@@ -187,6 +192,10 @@ class Player(pygame.sprite.Sprite):
         self.parterre = False
 		# faire la collision avec les y
         self.collision(False, False, saut)
+
+        #Meurt si sort de l'ecran
+        if self.rect.y > 480:
+            self.vie = 0
 
         #si plus de points de vie, devenir une tombe, et etre mort
         if self.vie <= 0:

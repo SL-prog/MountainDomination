@@ -97,5 +97,31 @@ def passertour(fenetre, tour):
                     attendre = False
     return tour, jeu, mountaindomination
 
+def gagner(vies1, vies2):
+    fenetre.blit(congratulations, (0,0))
+    font = pygame.font.Font(None, 50)
+    if sum(vies1) == 0:
+        texte = "Joueur 2"
+        couleur = (0,0,255)
+    if sum(vies2) == 0:
+        texte = "Joueur 1"
+        couleur = (255,0,0)
+    texteaffiche = font.render(texte, 1, couleur)
+    fenetre.blit(texteaffiche, (330, 190))
+    pygame.display.flip()
+
+    attendre = True
+    jeu = False
+    mountaindomination = True
+    while attendre==True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                mountaindomination = False
+                attendre = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    attendre = False
+    return jeu, mountaindomination
+
 
 

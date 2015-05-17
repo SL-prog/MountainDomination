@@ -76,6 +76,9 @@ def mapMAJ(nombre_perso, rouge, bleu, ximpact, yimpact, arme, fenetre):
     decor.rect.topleft = 0,0
     decor.mask = pygame.mask.from_surface(decor.image)
 
+    #for rang in range (nombre_perso):
+#retirer vie au perso
+
     for rang in range(nombre_perso):
         rouge[rang].decor = decor
         bleu[rang].decor = decor

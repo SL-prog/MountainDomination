@@ -117,8 +117,8 @@ while mountaindomination: #boucle principale de Mountain Domination
                   saut=False
 
               if event.key == pygame.K_SPACE:
-                  #rouge[numero].tir(chargement, tour, numero)
-                  #bleu[numero].tir(chargement, tour, numero)
+                  #rouge[numerorouge].tir(chargement, tour, numerorouge)
+                  #bleu[numerobleu].tir(chargement, tour, numerobleu)
                   decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
                   chargement = 0
   #touche D
@@ -132,8 +132,8 @@ while mountaindomination: #boucle principale de Mountain Domination
 
   #Gerer mouvement personnages - mettre a jour vie
       for rang in range(nombre_perso):
-          rouge[rang].mouvement(tour, numero, saut, gauche, droite, debug, angle, switch)
-          bleu[rang].mouvement(tour, numero, saut, gauche, droite, debug, angle, switch)
+          rouge[rang].mouvement(tour, numerorouge, saut, gauche, droite, debug, angle, switch)
+          bleu[rang].mouvement(tour, numerobleu, saut, gauche, droite, debug, angle, switch)
           vies1[rang] = rouge[rang].vie
           vies2[rang] = bleu[rang].vie
 
@@ -146,8 +146,8 @@ while mountaindomination: #boucle principale de Mountain Domination
 
   #Afficher les personnages
       for rang in range(nombre_perso):
-          rouge[rang].affiche(fenetre, tour, numero)
-          bleu[rang].affiche(fenetre, tour, numero)
+          rouge[rang].affiche(fenetre, tour, numerorouge)
+          bleu[rang].affiche(fenetre, tour, numerobleu)
 
   #Afficher sens - TEST
   #    if sens_perso==True:
@@ -160,33 +160,42 @@ while mountaindomination: #boucle principale de Mountain Domination
   #    textsens = font.render(charsens, 1, couleursens)
   #    fenetre.blit(textsens, (370,10))
 
-  #Afficher l'interface
+      #Afficher l'interface
       interface(fenetre, switch, chargement, tempsjeu, tour, vies1, vies2)
+
+      #faire passer tour aux morts
+      if (rouge[numerorouge].jouer and not(rouge[numerorouge].vivant)) or (bleu[numerobleu].jouer and not(bleu[numerobleu].vivant)):
+        tempsjeu = 0
 
   #timer temps jeu
       if pygame.time.get_ticks() > seconde:
           tempsjeu-=1
-          seconde = pygame.time.get_ticks() + 1000
+          seconde = pygame.time.get_ticks() + tempsattente
       if tempsjeu == -1:
           saut, gauche, droite, angle = 0,0,0,"" #pour eviter de controler le suivant avec les commandes du precedent
+          if tour == 2: #gerer tour de jeu
+            numerorouge+=1
+            if numerorouge == nombre_perso: #rester dans la liste de perso
+                numerorouge = 0
+            while rouge[numerorouge].vivant == False: #interdire aux morts de jouer
+                numerorouge+=1
+                if numerorouge == nombre_perso:
+                    numerorouge = 0
           if tour == 2:
-              numero+=1
-          if numero == nombre_perso:
-              numero = 0
-          if tour==1:
-              while rouge[numero].vivant == False:
-                  numero+=1
-                  if numero == nombre_perso:
-                      numero = 0
-
-          if tour==2:
-              while bleu[numero].vivant == False:
-                  numero+=1
-                  if numero == nombre_perso:
-                      numero = 0
+            numerobleu+=1
+            if numerobleu == nombre_perso:
+                numerobleu = 0
+            while bleu[numerobleu].vivant == False:
+                numerobleu+=1
+                if numerobleu == nombre_perso:
+                    numerobleu = 0
 
           tour, jeu, mountaindomination = passertour(fenetre, tour)
           tempsjeu = duree_tour
+
+      #arreter le jeu si une equipe gagne
+      if sum(vies1) == 0 or sum(vies2) == 0:
+        jeu, mountaindomination = gagner(vies1, vies2)
 
   #Rafraichissement/mise a jour de l'ecran
       pygame.display.flip()

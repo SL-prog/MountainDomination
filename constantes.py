@@ -38,6 +38,7 @@ horloge = pygame.image.load("image/interface/horloge.png").convert_alpha()
 
 tourjoueur1 = pygame.image.load("image/interface/tourjoueur1.png").convert_alpha()
 tourjoueur2 = pygame.image.load("image/interface/tourjoueur2.png").convert_alpha()
+congratulations = pygame.image.load("image/interface/congratulations.png")
 
 #initialiser les touches de commande
 gauche = False
@@ -51,9 +52,11 @@ tombe2 =  "image/personnages/tombe2.png"
 expl1 = pygame.image.load("image/armes/expl1.png").convert_alpha()
 expl2 = pygame.image.load("image/armes/expl2.png").convert_alpha()
 
-seconde = pygame.time.get_ticks() + 1000
+tempsattente = 1000
+seconde = pygame.time.get_ticks() + tempsattente
 
-numero = 0 #doit rester a 0
+numerorouge = 0 #doit rester a 0
+numerobleu = 0
 
 #TEST
 sens_perso = True
