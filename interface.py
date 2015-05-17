@@ -121,6 +121,7 @@ def gagner(vies1, vies2):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     attendre = False
+    songagner.stop()
     return jeu, mountaindomination
 
 

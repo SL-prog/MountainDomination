@@ -15,7 +15,9 @@ hauteur_ecran = 560
 
 #son
 sonmenu = pygame.mixer.Sound("sons/menu.wav")
+sonjeu = pygame.mixer.Sound("sons/jeu.wav")
 sonexplosion = pygame.mixer.Sound("sons/explosion.wav")
+songagner = pygame.mixer.Sound("sons/gagner.wav")
 
 #Titre ecran
 titre_fenetre = 'Mountain Domination'

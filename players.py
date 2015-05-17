@@ -56,8 +56,10 @@ class Player(pygame.sprite.Sprite):
         self.font = pygame.font.Font(None, 20)
 
         self.projectile = projectile
+        self.prjx = 0
+        self.prjy = 0
 
-    def affiche(self, fenetre, tour, numero):
+    def affiche(self, fenetre):
         if self.vivant:
             fenetre.blit(self.image, self.rect)
             #afficher vie perso
@@ -82,7 +84,7 @@ class Player(pygame.sprite.Sprite):
                 fenetre.blit(self.tombe, self.rect)
 
         if self.afficherprj == True:
-            fenetre.blit(self.projectile.image, (20,20))
+            fenetre.blit(self.projectile.image, (self.prjx,self.prjy))
 
 #afficher pos perso - TEST --------------------------
         if self.jouer:
@@ -154,7 +156,7 @@ class Player(pygame.sprite.Sprite):
             if saut and self.parterre:
                 self.depart_timer = True
                 self.fin_timer = False
-                self.rect.y -= self.vitesse_saut #dÃ©but saut
+                self.rect.y -= self.vitesse_saut #debut saut
 
         else: #si ce n'est pas son tour
             saut = 0
@@ -203,6 +205,8 @@ class Player(pygame.sprite.Sprite):
             self.vie = 0
             self.vivant = False
 
+        #print(self.angle)
+
     def collision(self, gauche, droite, saut):
         if (pygame.sprite.collide_mask(self, self.decor)):
             if gauche == True: self.rect.x += self.vitesse_x
@@ -220,8 +224,8 @@ class Player(pygame.sprite.Sprite):
                 self.fin_timer = True
 
 
-    def tir(self, chargement, tour, numero):
-        if ((tour == 1 and self.couleurperso == "red") or (tour == 2 and self.couleurperso == "blue")) and (self.rang == numero):
+    def tir(self, chargement):
+        if self.jouer:
             self.afficherprj = True
 
 

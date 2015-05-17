@@ -52,6 +52,7 @@ while mountaindomination: #boucle principale de Mountain Domination
   if menu == 5:
       #arret musique menu
       sonmenu.stop()
+      sonjeu.play(-1) #-1 pour infini
       #Ouverture de la fenetre Pygame
       pygame.display.set_caption(titre_fenetre)
       #initialisation de la map
@@ -117,8 +118,8 @@ while mountaindomination: #boucle principale de Mountain Domination
                   saut=False
 
               if event.key == pygame.K_SPACE:
-                  #rouge[numerorouge].tir(chargement, tour, numerorouge)
-                  #bleu[numerobleu].tir(chargement, tour, numerobleu)
+                  #rouge[numerorouge].tir(chargement)
+                  #bleu[numerobleu].tir(chargement)
                   decor = mapMAJ(nombre_perso, rouge, bleu, rouge[0].rect.x, rouge[0].rect.y, switch, fenetre)
                   chargement = 0
   #touche D
@@ -146,8 +147,8 @@ while mountaindomination: #boucle principale de Mountain Domination
 
   #Afficher les personnages
       for rang in range(nombre_perso):
-          rouge[rang].affiche(fenetre, tour, numerorouge)
-          bleu[rang].affiche(fenetre, tour, numerobleu)
+          rouge[rang].affiche(fenetre)
+          bleu[rang].affiche(fenetre)
 
   #Afficher sens - TEST
   #    if sens_perso==True:
@@ -195,11 +196,13 @@ while mountaindomination: #boucle principale de Mountain Domination
 
       #arreter le jeu si une equipe gagne
       if sum(vies1) == 0 or sum(vies2) == 0:
+        sonjeu.stop()
+        songagner.play(-1) #infini
         jeu, mountaindomination = gagner(vies1, vies2)
 
   #Rafraichissement/mise a jour de l'ecran
       pygame.display.flip()
   #Limitation de vitesse de la boucle
       pygame.time.Clock().tick(30)
-
+  sonjeu.stop()
 pygame.quit()
